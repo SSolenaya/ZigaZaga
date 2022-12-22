@@ -140,6 +140,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 823062be5a09f6a47b73bb125ee5d85c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _gemPrefab: {fileID: 4844832317834379287, guid: fce4c6a03b3745f49b09eeac66d33727, type: 3}
   _myDirection: 0
   _myView: {fileID: 4318434061992458886}
   _myScale: 1

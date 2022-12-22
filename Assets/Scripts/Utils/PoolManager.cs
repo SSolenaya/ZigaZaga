@@ -48,18 +48,18 @@ public class PoolManager : MonoBehaviour
 
     public static void PutRoadBlockToPool(RoadBlock target)
     {
-        _roadBlockStack.Push(target);
-        Debug.Log("Return RoadBlock to stack + RoadBlocks in pool: " + _roadBlockStack.Count);
-        target.transform.parent = _parentForDeactivatedGO;
+        target.transform.SetParent(_parentForDeactivatedGO);
         target.gameObject.SetActive(false);
+        _roadBlockStack.Push(target);
+       
     }
 
     public static void PutGemToPool(Gem target)
     {
-        _gemStack.Push(target);
-        Debug.Log("Return gem to stack + Gems in pool: " + _gemStack.Count);
-        target.transform.parent = _parentForDeactivatedGO;
+        target.transform.SetParent(_parentForDeactivatedGO);
         target.gameObject.SetActive(false);
+        _gemStack.Push(target);
+    
     }
 
 }

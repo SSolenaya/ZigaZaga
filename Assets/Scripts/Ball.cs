@@ -1,4 +1,3 @@
-using System;
 using DG.Tweening;
 using UnityEngine;
 
@@ -11,18 +10,18 @@ public enum BallStates
 
 public class Ball : MonoBehaviour
 {
-    private Directions _currentDir = Directions.left;
+    private Directions _currentDir;
     private Vector3 _currentDirectionV3;
     [SerializeField] private float _speed;
     [SerializeField] private RoadBlock _roadBlock;
-    [SerializeField] private BallStates _ballState = BallStates.move;
+    [SerializeField] private BallStates _ballState = BallStates.wait;
 
     private void Start()
     {
-        ChangeDirection();
+        _currentDir = Directions.right;
+        _currentDirectionV3 = Vector3.forward;
     }
-
-
+    
     private void Update()
     {
         SendRay();
@@ -31,7 +30,10 @@ public class Ball : MonoBehaviour
 
     private void SendRay()
     {
-        if (_ballState == BallStates.fall) return;
+        if (_ballState != BallStates.move)
+        {
+            return;
+        }
         Ray ray = new Ray(transform.position, -Vector3.up);
         Debug.DrawRay(ray.origin, ray.direction * 10, Color.green);
         RaycastHit hit;
@@ -50,36 +52,36 @@ public class Ball : MonoBehaviour
 
         if (_ballState == BallStates.fall)
         {
-            Vector3 vec = _currentDirectionV3 + Vector3.down;
-            transform.position += vec * Time.deltaTime * _speed * 3;
+            Vector3 fallingDir = _currentDirectionV3 + Vector3.down;
+            transform.position += fallingDir * Time.deltaTime * _speed * 3;
             if (transform.position.y < -6)
             {
-                MainLogic.Inst.Restart();
+                MainLogic.Inst.GameSessionFailed();
             }
         }
     }
 
     public void SetState(BallStates newState)
     {
-        if (_ballState == newState) return;
-        _ballState = newState;
+        if (_ballState == newState)
+        {
+            return;
+        }
+
         switch (newState)
         {
             case BallStates.fall:
-                var v3 = new Vector3(_currentDirectionV3.x , _currentDirectionV3.y, _currentDirectionV3.z);
-                //var v3_0 = new Vector3(0,0,0);
-                DOVirtual.Float(1, 0, 0.5f, (var) => {
-                    _currentDirectionV3 = v3 * var;
-                }).SetEase(Ease.OutQuad);
-                Debug.Log("falling !!!");
+                Vector3 simulationGravity = new Vector3(_currentDirectionV3.x, _currentDirectionV3.y, _currentDirectionV3.z);
+                AudioController.Inst.PlayFailSound();
+                DOVirtual.Float(1, 0, 0.5f, var => { _currentDirectionV3 = simulationGravity * var; }).SetEase(Ease.OutQuad);
                 break;
             case BallStates.move:
                 break;
             case BallStates.wait:
                 break;
-            default:
-                break;
         }
+
+        _ballState = newState;
     }
 
     public BallStates GetState()
@@ -89,13 +91,12 @@ public class Ball : MonoBehaviour
 
     public void ChangeDirection()
     {
-        if(_ballState == BallStates.fall) return;
+        if (_ballState == BallStates.fall)
+        {
+            return;
+        }
+
         _currentDir = _currentDir == Directions.right ? Directions.left : Directions.right;
         _currentDirectionV3 = _currentDir == Directions.right ? Vector3.forward : Vector3.right;
-    }
-
-    public void Restart()
-    {
-        SetState(BallStates.move);
     }
 }

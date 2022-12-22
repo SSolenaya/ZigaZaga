@@ -6,5 +6,10 @@ namespace Assets.Scripts {
         {
             Destroy(gameObject);
         }
+
+        public override void SetupAsDefault()
+        {
+            SetPhysicState(BlockStates.steady);
+        }
     }
 }
