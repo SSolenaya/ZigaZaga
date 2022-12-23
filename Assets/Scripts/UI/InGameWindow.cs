@@ -12,5 +12,12 @@ public class InGameWindow : BaseUiWindow
         pauseBtn.onClick.AddListener(() => {
             MainLogic.Inst.SetGameState(GameStates.pause);
         });
+
+        GameInfoManager.Inst.SubscribeForScore(SetCurrentScoreText);
+    }
+
+    private void SetCurrentScoreText(int newScore)
+    {
+        _currentScoreTxt.text = newScore.ToString();
     }
 }

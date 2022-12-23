@@ -24,6 +24,7 @@ public class MainMenuWindow : BaseUiWindow
         SetupSettingsButtonFunc();
         fullScreenClickObserver.SubscribeForClick(() => {
            MainLogic.Inst.SetGameState(GameStates.play);
+           SaveManager.SetPlayedGamesCount();
         });
     }
 

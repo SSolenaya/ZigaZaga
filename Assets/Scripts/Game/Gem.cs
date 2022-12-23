@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Gem : MonoBehaviour
 {
-    private readonly int scoreForGem = 2;
+    private readonly int scoreForGem = 2;//TODO to SO
 
     public void OnTriggerEnter(Collider col)
     {
@@ -13,8 +13,8 @@ public class Gem : MonoBehaviour
             return;
         }
 
-        PlayerManager.Inst.AddGem(1);
-        PlayerManager.Inst.AddScore(scoreForGem);
+        GameInfoManager.Inst.AddGem(1);
+        GameInfoManager.Inst.AddScore(scoreForGem);
         AudioController.Inst.PlayGemSound();
         SelfDestroy();
     }

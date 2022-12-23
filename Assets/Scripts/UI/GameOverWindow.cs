@@ -8,11 +8,14 @@ public class GameOverWindow : BaseUiWindow
 
     public void Start()
     {
-        _currentScoreTxt.text = 10.ToString(); //$"BEST SCORE: {SaveManager.GetBestScore()}";
-        _bestScoreTxt.text = 11.ToString(); //$"GAMES PLAYED: {SaveManager.GetGamesNumber()}";
-
         fullScreenClickObserver.SubscribeForClick(() => {
             MainLogic.Inst.SetGameState(GameStates.readyToPlay);
         });
+    }
+
+    public void OnEnable()
+    {
+        _currentScoreTxt.text = StringConfig.currentScore + " " + GameInfoManager.Inst.CurrentScore;
+        _bestScoreTxt.text = StringConfig.bestScore + " " + SaveManager.GetBestScore();
     }
 }

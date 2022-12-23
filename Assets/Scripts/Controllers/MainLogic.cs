@@ -40,6 +40,7 @@ public class MainLogic : Singleton<MainLogic>
             case GameStates.none:
                 break;
             case GameStates.readyToPlay:
+                GameInfoManager.Inst.ResetOldInfo();
                 ClearSession();
                 _roadController.Generation();
                 BallController.Inst.GenerationBall();
@@ -48,13 +49,12 @@ public class MainLogic : Singleton<MainLogic>
             case GameStates.play:
                 WindowManager.Inst.OpenWindow(TypeWindow.inGame);
                 BallController.Inst.Play();
-
                 break;
             case GameStates.pause:
                 WindowManager.Inst.OpenWindow(TypeWindow.pause);
-
                 break;
             case GameStates.gameOver:
+                GameInfoManager.Inst.EndGame();
                 WindowManager.Inst.OpenWindow(TypeWindow.gameOver);
                 break;
 
@@ -77,15 +77,15 @@ public class MainLogic : Singleton<MainLogic>
         return _currentGameState;
     }
 
-    private void GameSessionFailed()
-    {
-        if (GetState() == GameStates.pause)
-        {
-            return;
-        }
-
-        SetGameState(GameStates.pause);
-        _roadController.Generation();
-        BallController.Inst.GenerationBall();
-    }
+   //private void GameSessionFailed()
+   //{
+   //    if (GetState() == GameStates.pause)
+   //    {
+   //        return;
+   //    }
+   //
+   //    SetGameState(GameStates.pause);
+   //    _roadController.Generation();
+   //    BallController.Inst.GenerationBall();
+   //}
 }

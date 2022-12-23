@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public static class SaveManager
@@ -7,49 +5,60 @@ public static class SaveManager
     private static readonly string _keySaveData = "keySaveData";
     private static SaveData _saveData;
 
-    // public static void IncrementGamesCounter()
-    // {
-    //     int gamesPlayed = PlayerPrefs.GetInt(_keyForGamesCount, 0);
-    //     gamesPlayed++;
-    //     PlayerPrefs.SetInt(_keyForGamesCount, gamesPlayed);
-    //     PlayerPrefs.Save();
-    // }
-    //
-    // public static int GetGamesNumber()
-    // {
-    //     int result = PlayerPrefs.GetInt(_keyForGamesCount, 0);
-    //     return result;
-    // }
-    //
-    // public static void IncreaseTotalGemsCounter(int addGemsAmount)
-    // {
-    //     int gemsTotal = PlayerPrefs.GetInt(_keyForTotalGemsAmount, 0);
-    //     gemsTotal += addGemsAmount;
-    //     PlayerPrefs.SetInt(_keyForTotalGemsAmount, gemsTotal);
-    //     PlayerPrefs.Save();
-    // }
-    //
-    // public static int GetTotalScore()
-    // {
-    //     int result = PlayerPrefs.GetInt(_keyForTotalGemsAmount, 0);
-    //     return result;
-    // }
-    //
-    // public static void ChangeBestScore(int newBestScore)
-    // {
-    //     int currentBestScore = PlayerPrefs.GetInt(_keyForBestScore, 0);
-    //     int score = newBestScore > currentBestScore ? newBestScore : currentBestScore;
-    //     PlayerPrefs.SetInt(_keyForBestScore, score);
-    //     PlayerPrefs.Save();
-    // }
-    //
-    // public static int GetBestScore()
-    // {
-    //     int result = PlayerPrefs.GetInt(_keyForBestScore, 0);
-    //     return result;
-    // }
+    public static void SetBestScore(int newScore)
+    {
+        _saveData.bestScore = newScore > _saveData.bestScore ? newScore : _saveData.bestScore;
+        Save();
+    }
 
-    private static  void Load()
+    public static int GetBestScore()
+    {
+        int result = 0;
+        if (_saveData != null)
+        {
+            result = _saveData.bestScore;
+        }
+        return result;
+    }
+
+    public static void SetPlayedGamesCount(int gamesAmount = 1)
+    {
+        _saveData.countGames++;
+        Save();
+    }
+
+    public static int GetPlayedGamesCount()
+    {
+        int result = 0;
+        if (_saveData != null)
+        {
+            result = _saveData.countGames;
+        }
+        return result;
+    }
+
+    public static void SetGemsCount(int gemsAmount = 1)
+    {
+        _saveData.totalGems += gemsAmount;
+        Save();
+    }
+
+    public static int GetTotalGemsCount()
+    {
+        int result = 0;
+        if (_saveData != null)
+        {
+            result = _saveData.totalGems;
+        }
+        return result;
+    }
+
+    public static void Init()
+    {
+        Load();
+    }
+
+    private static void Load()      //  TODO load before 1st session
     {
         string json = PlayerPrefs.GetString(_keySaveData, "");
         _saveData = json == "" ? new SaveData() : JsonUtility.FromJson<SaveData>(json);
@@ -60,5 +69,12 @@ public static class SaveManager
         string json = JsonUtility.ToJson(_saveData);
         PlayerPrefs.SetString(_keySaveData, json);
     }
+}
 
+
+public class SaveData
+{
+    public int bestScore;
+    public int countGames;
+    public int totalGems;
 }

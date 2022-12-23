@@ -19,7 +19,9 @@ public class BallController : Singleton<BallController>
     public void Start()
     {
         WindowManager.Inst.GetWindow<InGameWindow>(TypeWindow.inGame).fullScreenClickObserver.SubscribeForClick(() => {
+            AudioController.Inst.PlayTapSound();
             _ball.ChangeDirection();
+            GameInfoManager.Inst.AddScore(1);//TODO to SO
         });
     }
 
