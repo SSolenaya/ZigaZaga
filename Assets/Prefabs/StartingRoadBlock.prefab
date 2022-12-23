@@ -90,7 +90,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3414269171336597408}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
@@ -104,7 +104,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 31920019490088849}
-  - component: {fileID: 3113752869784953017}
   - component: {fileID: 8231812581618344430}
   m_Layer: 0
   m_Name: StartingRoadBlock
@@ -129,22 +128,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
---- !u!54 &3113752869784953017
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6237237725148695234}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0
-  m_UseGravity: 0
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 122
-  m_CollisionDetection: 0
 --- !u!114 &8231812581618344430
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -158,11 +141,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _gemPrefab: {fileID: 0}
-  _gemsList: []
-  _direction: 0
   _view: {fileID: 3414269171336597408}
-  _scale: 1
-  _rB: {fileID: 3113752869784953017}
   _botTrigger: {fileID: 4704096391804539210}
 --- !u!1001 &6192014001078235902
 PrefabInstance:

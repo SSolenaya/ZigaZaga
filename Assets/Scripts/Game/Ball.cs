@@ -121,5 +121,25 @@ public class Ball : MonoBehaviour
                 ChangeDirection();
             }
         }
+
+        Gem gem = col.gameObject.GetComponent<Gem>();
+
+        if (gem != null)
+        {
+            GameInfoManager.Inst.AddGem(1);
+            GameInfoManager.Inst.AddScore(MainLogic.Inst.SO.scoreForGem);
+            AudioController.Inst.PlayGemSound();
+            gem.SelfDestroy();
+        }
     }
+
+    public void OnTriggerExit(Collider col)
+    {
+        RoadBlock roadBlock = col.gameObject.transform.parent.GetComponent<RoadBlock>();
+        if (roadBlock != null)
+        {
+            roadBlock.SetPhysicState(BlockStates.heavy);
+        }
+    }
+
 }

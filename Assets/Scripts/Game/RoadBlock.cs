@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 
 public enum Directions
@@ -20,13 +21,12 @@ public class RoadBlock : MonoBehaviour
     public int Scale { get; set; }
 
     [SerializeField] private Gem _gemPrefab;
-    [SerializeField] private Rigidbody _rB;
     [SerializeField] private GameObject _view;
     [SerializeField] protected BotTrigger _botTrigger;
 
     private BlockStates _phState;
     private List<Gem> _gemsList = new List<Gem>();
-   
+    private Tween _tweenMove;
 
     public virtual void Setup(int scale, RoadBlock previousBlock)
     {
@@ -64,15 +64,7 @@ public class RoadBlock : MonoBehaviour
             }
         }
     }
-
-    private void Update()
-    {
-        if (_phState == BlockStates.heavy && transform.position.y < MainLogic.Inst.SO.yCoordForDestroy)
-        {
-            SelfDestroy();
-        }
-    }
-
+    
     public Vector3 GetPositionForNextBlock()
     {
         float xCoord = transform.position.x + (Direction == Directions.right ? Scale : 0f);
@@ -81,14 +73,7 @@ public class RoadBlock : MonoBehaviour
         return myEndPos;
     }
 
-    public void OnTriggerExit(Collider col)
-    {
-        Ball ball = col.gameObject.GetComponent<Ball>();
-        if (ball != null)
-        {
-            SetPhysicState(BlockStates.heavy);
-        }
-    }
+
 
     public void SetPhysicState(BlockStates newState)
     {
@@ -100,14 +85,13 @@ public class RoadBlock : MonoBehaviour
         switch (newState)
         {
             case BlockStates.heavy:
-                _rB.useGravity = true;
-                _rB.isKinematic = false;
+                _tweenMove = transform.DOMove(transform.position + Vector3.up * MainLogic.Inst.SO.yCoordForDestroy, 1.2f).SetEase(Ease.InQuad).OnComplete(() => {
+                    SelfDestroy();
+                });
                 break;
             case BlockStates.steady:
             case BlockStates.inPool:
             default:
-                _rB.useGravity = false;
-                _rB.isKinematic = true;
                 break;
         }
 
@@ -126,7 +110,7 @@ public class RoadBlock : MonoBehaviour
 
             _gemsList.Clear();
         }
-
+        _tweenMove?.Kill();
         SetPhysicState(BlockStates.inPool);
         RoadController.Inst.SendBlockToPool(this);
     }

@@ -10,20 +10,7 @@ public class Gem : MonoBehaviour
         _speed = MainLogic.Inst.SO.gemRotatingSpeed * Random.Range(0.8f, 1.2f);
     }
 
-    public void OnTriggerEnter(Collider col)
-    {
-        Ball ball = col.gameObject.GetComponent<Ball>();
-
-        if (ball == null)
-        {
-            return;
-        }
-
-        GameInfoManager.Inst.AddGem(1);
-        GameInfoManager.Inst.AddScore(MainLogic.Inst.SO.scoreForGem);
-        AudioController.Inst.PlayGemSound();
-        SelfDestroy();
-    }
+  
 
     public void Update()
     {

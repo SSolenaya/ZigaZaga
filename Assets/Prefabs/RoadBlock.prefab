@@ -90,7 +90,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4318434061992458886}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
@@ -105,7 +105,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1512827155346231991}
   - component: {fileID: 1500132028892515072}
-  - component: {fileID: 4591849600972133791}
   m_Layer: 0
   m_Name: RoadBlock
   m_TagString: Untagged
@@ -142,28 +141,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _gemPrefab: {fileID: 4844832317834379287, guid: fce4c6a03b3745f49b09eeac66d33727, type: 3}
-  _gemsList: []
-  _direction: 0
   _view: {fileID: 4318434061992458886}
-  _scale: 1
-  _rB: {fileID: 4591849600972133791}
   _botTrigger: {fileID: 684428404855913578}
---- !u!54 &4591849600972133791
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4756045250121924580}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0
-  m_UseGravity: 0
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 122
-  m_CollisionDetection: 0
 --- !u!1001 &2150936466122350558
 PrefabInstance:
   m_ObjectHideFlags: 0
