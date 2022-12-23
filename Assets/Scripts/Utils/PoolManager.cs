@@ -2,14 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PoolManager : MonoBehaviour
+public class PoolManager : Singleton<PoolManager>
 {
     private static Stack<RoadBlock> _roadBlockStack;
     private static Stack<Gem> _gemStack;
     private static Transform _parentForDeactivatedGO;
     public Transform parentGO;
 
-    public void Init()
+    public void Awake()
     {
         _parentForDeactivatedGO = parentGO;
         _roadBlockStack = new Stack<RoadBlock>();

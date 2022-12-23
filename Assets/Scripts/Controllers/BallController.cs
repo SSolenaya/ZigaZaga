@@ -3,25 +3,15 @@
 public class BallController : Singleton<BallController>
 {
     [SerializeField] private Ball _ballPrefab;
-    private Ball _ball;
     [SerializeField] private Transform _parentForRoad;
-    [SerializeField] private Camera _cam;
-    [SerializeField] private Transform _blockCameraTransform;
-    public static float boundsSize; //  границы экрана
-    public Vector2 _screenCenterPos;
+    private Ball _ball;
+    private Vector3 coordsCenterBall = new Vector3();
 
-    private void Awake()
-    {
-        float orthoSize = _cam.orthographicSize;
-        boundsSize = orthoSize / Screen.height * Screen.width;
-    }
-
-    public void Start()
+    private void Start()
     {
         WindowManager.Inst.GetWindow<InGameWindow>(TypeWindow.inGame).fullScreenClickObserver.SubscribeForClick(() => {
             AudioController.Inst.PlayTapSound();
             _ball.ChangeDirection();
-            GameInfoManager.Inst.AddScore(1);//TODO to SO
         });
     }
 
@@ -31,12 +21,16 @@ public class BallController : Singleton<BallController>
     }
 
     public void GenerationBall()
-    {        
-        _blockCameraTransform.position = new Vector3(0, 10f, 0);
-
+    {
         _ball = Instantiate(_ballPrefab, _parentForRoad);
         _ball.transform.localPosition = new Vector3(0f, 1.3f, -1.2f);
         _ball.SetState(BallStates.wait);
+    }
+
+    public float GetCoordsCenterBall()
+    {
+        coordsCenterBall = _ball.transform.position;
+        return (coordsCenterBall.x + coordsCenterBall.z) * 0.5f;
     }
 
     public void Play()
@@ -44,27 +38,9 @@ public class BallController : Singleton<BallController>
         _ball.SetState(BallStates.move);
     }
 
-    private void Update()
+    public BallStates GetBallStates()
     {
-        if (MainLogic.Inst.GetState() != GameStates.play)
-        {
-            return;
-        }
-        MovementUpwardsImitation();
-    }
-
-    private void MovementUpwardsImitation()
-    {
-        if (_ball.GetState() == BallStates.move)
-        {
-            Vector3 v3 = new Vector3(Mathf.Sqrt(2f), 0, Mathf.Sqrt(2f));
-            _blockCameraTransform.position += v3 * Time.deltaTime; // перемещение камеры за мячом
-            float delta = Mathf.Sqrt(Mathf.Pow(_screenCenterPos.x - _blockCameraTransform.position.x, 2) + Mathf.Pow(_screenCenterPos.y - _blockCameraTransform.position.z, 2));
-            if (delta < 30)
-            {
-               RoadController.Inst.GenerateRoad(1);
-            }
-        }
+        return _ball.GetState();
     }
 
     public void Clear()

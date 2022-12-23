@@ -1,9 +1,15 @@
+using System;
 using UnityEngine;
 
 public static class SaveManager
 {
     private static readonly string _keySaveData = "keySaveData";
     private static SaveData _saveData;
+
+    public static void Init()
+    {
+        Load();
+    }
 
     public static void SetBestScore(int newScore)
     {
@@ -13,12 +19,7 @@ public static class SaveManager
 
     public static int GetBestScore()
     {
-        int result = 0;
-        if (_saveData != null)
-        {
-            result = _saveData.bestScore;
-        }
-        return result;
+        return _saveData.bestScore;
     }
 
     public static void SetPlayedGamesCount(int gamesAmount = 1)
@@ -29,12 +30,7 @@ public static class SaveManager
 
     public static int GetPlayedGamesCount()
     {
-        int result = 0;
-        if (_saveData != null)
-        {
-            result = _saveData.countGames;
-        }
-        return result;
+        return _saveData.countGames;
     }
 
     public static void SetGemsCount(int gemsAmount = 1)
@@ -45,20 +41,21 @@ public static class SaveManager
 
     public static int GetTotalGemsCount()
     {
-        int result = 0;
-        if (_saveData != null)
-        {
-            result = _saveData.totalGems;
-        }
-        return result;
+        return _saveData.totalGems;
     }
 
-    public static void Init()
+    public static void SetSoundState(bool var)
     {
-        Load();
+        _saveData.isSoundOn = var;
+        Save();
     }
 
-    private static void Load()      //  TODO load before 1st session
+    public static bool GetSoundState()
+    {
+        return _saveData.isSoundOn;
+    }
+
+    private static void Load() //  TODO load before 1st session
     {
         string json = PlayerPrefs.GetString(_keySaveData, "");
         _saveData = json == "" ? new SaveData() : JsonUtility.FromJson<SaveData>(json);
@@ -71,10 +68,11 @@ public static class SaveManager
     }
 }
 
-
+[Serializable]
 public class SaveData
 {
     public int bestScore;
     public int countGames;
     public int totalGems;
+    public bool isSoundOn;
 }

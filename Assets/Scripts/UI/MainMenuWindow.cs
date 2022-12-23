@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using Assets.Scripts;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,20 +12,23 @@ public class MainMenuWindow : BaseUiWindow
     [SerializeField] private Sprite _soundOffSprite;
     [SerializeField] private Button _settingsBtn;
 
+
     public void Start()
     {
-        _bestScoreTxt.text = 10.ToString();//$"BEST SCORE: {SaveManager.GetBestScore()}";
-        _gamesCountTxt.text = 11.ToString();//$"GAMES PLAYED: {SaveManager.GetGamesNumber()}";
-        _totalGemsTxt.text = 12.ToString();///$"TOTAL SCORE: {SaveManager.GetTotalScore()}";
         SetupSoundButtonFunc();
         SetupSettingsButtonFunc();
         fullScreenClickObserver.SubscribeForClick(() => {
-           MainLogic.Inst.SetGameState(GameStates.play);
-           SaveManager.SetPlayedGamesCount();
+            MainLogic.Inst.SetGameState(GameStates.play);
+            SaveManager.SetPlayedGamesCount();
         });
     }
 
-
+    public void OnEnable()
+    {
+        _bestScoreTxt.text = StringConfig.bestScore + " " + SaveManager.GetBestScore();
+        _gamesCountTxt.text = StringConfig.gamesPlayed + " " + SaveManager.GetPlayedGamesCount();
+        _totalGemsTxt.text = StringConfig.totalGems + " " + SaveManager.GetTotalGemsCount();
+    }
 
     public void SetupSettingsButtonFunc()
     {

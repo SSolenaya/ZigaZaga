@@ -16,34 +16,41 @@ public enum BlockStates
 
 public class RoadBlock : MonoBehaviour
 {
-    [SerializeField] private Gem _gemPrefab;
-    public List<Gem> _gemsList;
-    [SerializeField] public Directions _myDirection;
-    [SerializeField] private GameObject _myView;
-    [SerializeField] public int _myScale = 1;
-    [SerializeField] private Rigidbody _rB;
-    private BlockStates _phState;
-    private RoadController _roadController;
+    public Directions Direction { get; set; }
+    public int Scale { get; set; }
 
-    public virtual void Setup(int scale, RoadBlock previousBlock, RoadController rc)
+    [SerializeField] private Gem _gemPrefab;
+    [SerializeField] private Rigidbody _rB;
+    [SerializeField] private GameObject _view;
+    [SerializeField] protected BotTrigger _botTrigger;
+
+    private BlockStates _phState;
+    private List<Gem> _gemsList = new List<Gem>();
+   
+
+    public virtual void Setup(int scale, RoadBlock previousBlock)
     {
-        _roadController = rc;
         SetPhysicState(BlockStates.steady);
-        _myDirection = previousBlock._myDirection == Directions.left ? Directions.right : Directions.left;
-        _myScale = scale;
+        Direction = previousBlock.Direction == Directions.left ? Directions.right : Directions.left;
+        Scale = scale;
+
         Vector3 instPos = previousBlock.GetPositionForNextBlock();
-        _myView.transform.localPosition = new Vector3(0, 0.5f, _myScale / 2f - 0.5f);
-        _myView.transform.localScale = new Vector3(1, 1, _myScale);
+        _view.transform.localPosition = new Vector3(0, 0.5f, Scale / 2f - 0.5f);
+        _view.transform.localScale = new Vector3(1, 1, Scale);
+
         transform.position = instPos;
-        transform.eulerAngles = Vector3.up * (_myDirection == Directions.left ? 0 : 90);
+        transform.eulerAngles = Vector3.up * (Direction == Directions.left ? 0 : 90);
+
+        
+        _botTrigger.transform.localPosition = new Vector3(0, 1, Scale + 0.4f);
+        _botTrigger.ChangeState(false);
         InstantiatingGem();
     }
-
-
+    
     private void InstantiatingGem()
     {
-        _gemsList = new List<Gem>(_myScale);
-        int maxGems = _myScale <= 2 ? 1 : _myScale - 2;
+        _gemsList = new List<Gem>(Scale);
+        int maxGems = Scale <= 2 ? 1 : Scale - 2;
         for (int i = 1; i <= maxGems; i++)
         {
             float r = Random.Range(0, 1f);
@@ -51,22 +58,16 @@ public class RoadBlock : MonoBehaviour
             {
                 Gem _gem = PoolManager.GetGemFromPull(_gemPrefab);
                 _gem.transform.SetParent(gameObject.transform);
-                float z = Random.Range(0, _myScale - 1);
                 _gem.transform.localPosition = new Vector3(0, 1.5f, i);
-                _gem.gameObject.name = gameObject.name + "_Gem_" + i;
-                if (i > maxGems)
-                {
-                    Debug.LogError("Gems positioning Error: maxGems = " + maxGems + " i = " + i); //  temp
-                }
-
+                _gem.gameObject.name = "Gem_" + i + "_on_" + gameObject.name;
                 _gemsList.Add(_gem);
             }
         }
     }
 
-    private void LateUpdate()
+    private void Update()
     {
-        if (_phState == BlockStates.heavy && transform.position.y < -6)
+        if (_phState == BlockStates.heavy && transform.position.y < MainLogic.Inst.SO.yCoordForDestroy)
         {
             SelfDestroy();
         }
@@ -74,8 +75,8 @@ public class RoadBlock : MonoBehaviour
 
     public Vector3 GetPositionForNextBlock()
     {
-        float xCoord = transform.position.x + (_myDirection == Directions.right ? _myScale : 0f);
-        float zCoord = transform.position.z + (_myDirection == Directions.left ? _myScale : 0f);
+        float xCoord = transform.position.x + (Direction == Directions.right ? Scale : 0f);
+        float zCoord = transform.position.z + (Direction == Directions.left ? Scale : 0f);
         Vector3 myEndPos = new Vector3(xCoord, transform.position.y, zCoord);
         return myEndPos;
     }
@@ -95,8 +96,7 @@ public class RoadBlock : MonoBehaviour
         {
             return;
         }
-
-
+        
         switch (newState)
         {
             case BlockStates.heavy:
@@ -128,7 +128,7 @@ public class RoadBlock : MonoBehaviour
         }
 
         SetPhysicState(BlockStates.inPool);
-        _roadController.SendBlockToPool(this);
+        RoadController.Inst.SendBlockToPool(this);
     }
 
 

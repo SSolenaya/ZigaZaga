@@ -9,6 +9,7 @@ namespace Assets.Scripts {
 
         public override void SetupAsDefault()
         {
+            _botTrigger.ChangeState(false);
             SetPhysicState(BlockStates.steady);
         }
     }

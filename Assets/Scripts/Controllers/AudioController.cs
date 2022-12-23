@@ -1,18 +1,19 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class AudioController : Singleton<AudioController>
 {
+    public bool IsSoundOn { get; private set; }
+
     [SerializeField] private AudioClip _tapClip;
     [SerializeField] private AudioClip _clickClip;
     [SerializeField] private AudioClip _gemClip;
     [SerializeField] private AudioClip _failClip;
     [SerializeField] private AudioSource _effectsAudioSource;
-    public bool IsSoundOn { get; private set; } = true;
 
-    public void Start()
+    public void Init()
     {
+        IsSoundOn = SaveManager.GetSoundState();
+        _effectsAudioSource.mute = !IsSoundOn;
     }
 
     public void PlayTapSound()
@@ -40,6 +41,4 @@ public class AudioController : Singleton<AudioController>
         IsSoundOn = !IsSoundOn;
         _effectsAudioSource.mute = !IsSoundOn;
     }
-
-
 }

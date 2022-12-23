@@ -7,20 +7,19 @@ public enum GameStates
     play = 10,
     pause = 15,
     gameOver = 20,
-
 }
 
 public class MainLogic : Singleton<MainLogic>
 {
-    [SerializeField] private RoadController _roadController;
-    [SerializeField] private PoolManager _poolManager;
-
+    public SOGameSettings SO;
     private GameStates _currentGameState = GameStates.none;
-
+    private bool _isCheatMode;
 
     private void Awake()
     {
-        _poolManager.Init();
+        SaveManager.Init();
+        AudioController.Inst.Init();
+        _isCheatMode = false;
     }
 
     private void Start()
@@ -41,9 +40,12 @@ public class MainLogic : Singleton<MainLogic>
                 break;
             case GameStates.readyToPlay:
                 GameInfoManager.Inst.ResetOldInfo();
-                ClearSession();
-                _roadController.Generation();
+                RoadController.Inst.Clear();
+                BallController.Inst.Clear();
+
+                RoadController.Inst.Generation();
                 BallController.Inst.GenerationBall();
+                CameraController.Inst.ResetPosition();
                 WindowManager.Inst.OpenWindow(TypeWindow.mainMenu);
                 break;
             case GameStates.play:
@@ -66,26 +68,18 @@ public class MainLogic : Singleton<MainLogic>
         _currentGameState = newState;
     }
 
-    private void ClearSession()
-    {
-        _roadController.Clear();
-        BallController.Inst.Clear();
-    }
-
     public GameStates GetState()
     {
         return _currentGameState;
     }
 
-   //private void GameSessionFailed()
-   //{
-   //    if (GetState() == GameStates.pause)
-   //    {
-   //        return;
-   //    }
-   //
-   //    SetGameState(GameStates.pause);
-   //    _roadController.Generation();
-   //    BallController.Inst.GenerationBall();
-   //}
+    public void SetCheatMode(bool var)
+    {
+        _isCheatMode = var;
+    }
+
+    public bool GetCheatModeState()
+    {
+        return _isCheatMode;
+    }
 }

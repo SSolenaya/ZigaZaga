@@ -3,28 +3,24 @@ using UnityEngine;
 
 public class GameInfoManager : Singleton<GameInfoManager>
 {
-    private int currentGems;
-    private int _currentScore;
     public int CurrentScore
     {
         get => _currentScore;
         set
         {
             _currentScore = value;
-            changeCurrentScore?.Invoke(_currentScore);
+            _changeCurrentScore?.Invoke(_currentScore);
         }
     }
-    private Action<int> changeCurrentScore;
+    private Action<int> _changeCurrentScore;
 
-    private void Start()
-    {
-        SaveManager.Init();
-    }
+    private int _currentGems;
+    private int _currentScore;
 
     public void ResetOldInfo()
     {
         CurrentScore = 0;
-        currentGems = 0;
+        _currentGems = 0;
     }
     
     public void EndGame()
@@ -34,18 +30,22 @@ public class GameInfoManager : Singleton<GameInfoManager>
 
     public void AddGem(int count)
     {
-        currentGems += count;
-        SaveManager.SetGemsCount(currentGems);          //  TODO on app exit
+        _currentGems += count;
+        SaveManager.SetGemsCount(count);
     }
 
     public void AddScore(int count)
     {
         CurrentScore += count;
-        SaveManager.SetBestScore(_currentScore);          //  TODO on app exit
     }
 
     public void SubscribeForScore(Action<int> act)
     {
-        changeCurrentScore += act;
+        _changeCurrentScore += act;
+    }
+
+    private void OnApplicationQuit()
+    {
+        SaveManager.Save();
     }
 }

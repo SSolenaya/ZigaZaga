@@ -10,24 +10,27 @@ public enum BallStates
 
 public class Ball : MonoBehaviour
 {
+    
+    private RoadBlock _roadBlock;
+    private BallStates _ballState = BallStates.wait;
     private Directions _currentDir;
     private Vector3 _currentDirectionV3;
-    [SerializeField] private float _speed;
-    [SerializeField] private RoadBlock _roadBlock;
-    [SerializeField] private BallStates _ballState = BallStates.wait;
+    private float _speed;
 
     private void Start()
     {
         _currentDir = Directions.right;
         _currentDirectionV3 = Vector3.forward;
+        _speed = MainLogic.Inst.SO.ballSpeed;
     }
-    
+
     private void Update()
     {
         if (MainLogic.Inst.GetState() != GameStates.play)
         {
             return;
         }
+
         SendRay();
         Move();
     }
@@ -38,6 +41,7 @@ public class Ball : MonoBehaviour
         {
             return;
         }
+
         Ray ray = new Ray(transform.position, -Vector3.up);
         Debug.DrawRay(ray.origin, ray.direction * 10, Color.green);
         RaycastHit hit;
@@ -58,7 +62,7 @@ public class Ball : MonoBehaviour
         {
             Vector3 fallingDir = _currentDirectionV3 + Vector3.down;
             transform.position += fallingDir * Time.deltaTime * _speed * 3;
-            if (transform.position.y < -6)
+            if (transform.position.y < MainLogic.Inst.SO.yCoordForDestroy)
             {
                 MainLogic.Inst.SetGameState(GameStates.gameOver);
             }
@@ -75,6 +79,7 @@ public class Ball : MonoBehaviour
         switch (newState)
         {
             case BallStates.fall:
+                WindowManager.Inst.CloseWindow(TypeWindow.inGame);
                 Vector3 simulationGravity = new Vector3(_currentDirectionV3.x, _currentDirectionV3.y, _currentDirectionV3.z);
                 AudioController.Inst.PlayFailSound();
                 DOVirtual.Float(1, 0, 0.5f, var => { _currentDirectionV3 = simulationGravity * var; }).SetEase(Ease.OutQuad);
@@ -100,7 +105,21 @@ public class Ball : MonoBehaviour
             return;
         }
 
+        GameInfoManager.Inst.AddScore(MainLogic.Inst.SO.scoreForTap);
         _currentDir = _currentDir == Directions.right ? Directions.left : Directions.right;
         _currentDirectionV3 = _currentDir == Directions.right ? Vector3.forward : Vector3.right;
+    }
+
+    public void OnTriggerEnter(Collider col)
+    {
+        if (MainLogic.Inst.GetCheatModeState())
+        {
+            BotTrigger botTrigger = col.gameObject.GetComponent<BotTrigger>();
+            if (botTrigger != null && !botTrigger.GetState())
+            {
+                botTrigger.ChangeState(true);
+                ChangeDirection();
+            }
+        }
     }
 }
