@@ -18,5 +18,10 @@ namespace Assets.Scripts
         {
             _onClick?.Invoke();
         }
+
+        public void UnsubscribeAll()
+        {
+            _onClick = null;
+        }
     }
 }

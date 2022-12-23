@@ -1,11 +1,13 @@
-using Assets.Scripts;
 using UnityEngine;
 
 public enum GameStates
 {
-    none,
-    play,
-    pause
+    none = 0,
+    readyToPlay = 5,
+    play = 10,
+    pause = 15,
+    gameOver = 20,
+
 }
 
 public class MainLogic : Singleton<MainLogic>
@@ -19,20 +21,11 @@ public class MainLogic : Singleton<MainLogic>
     private void Awake()
     {
         _poolManager.Init();
-        UIController.Inst.Init();
     }
 
     private void Start()
     {
-        SetGameState(GameStates.none);
-        _roadController.Generation();
-        BallController.Inst.GenerationBall();
-       
-    }
-
-    public void Play()
-    {
-        BallController.Inst.Play();
+        SetGameState(GameStates.readyToPlay);
     }
 
     public void SetGameState(GameStates newState)
@@ -46,11 +39,23 @@ public class MainLogic : Singleton<MainLogic>
         {
             case GameStates.none:
                 break;
+            case GameStates.readyToPlay:
+                ClearSession();
+                _roadController.Generation();
+                BallController.Inst.GenerationBall();
+                WindowManager.Inst.OpenWindow(TypeWindow.mainMenu);
+                break;
             case GameStates.play:
-                Play();
+                WindowManager.Inst.OpenWindow(TypeWindow.inGame);
+                BallController.Inst.Play();
+
                 break;
             case GameStates.pause:
-                ClearSession();
+                WindowManager.Inst.OpenWindow(TypeWindow.pause);
+
+                break;
+            case GameStates.gameOver:
+                WindowManager.Inst.OpenWindow(TypeWindow.gameOver);
                 break;
 
             default:
@@ -65,7 +70,6 @@ public class MainLogic : Singleton<MainLogic>
     {
         _roadController.Clear();
         BallController.Inst.Clear();
-        //UserProgressManager.Inst.Clear();
     }
 
     public GameStates GetState()
@@ -73,15 +77,14 @@ public class MainLogic : Singleton<MainLogic>
         return _currentGameState;
     }
 
-    public void GameSessionFailed()
+    private void GameSessionFailed()
     {
         if (GetState() == GameStates.pause)
         {
             return;
         }
-        //UserProgressManager.Inst.SaveCurrentProgress();
+
         SetGameState(GameStates.pause);
-        UIController.Inst.ShowMenu();
         _roadController.Generation();
         BallController.Inst.GenerationBall();
     }

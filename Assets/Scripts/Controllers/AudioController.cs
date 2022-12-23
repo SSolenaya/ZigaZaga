@@ -13,7 +13,6 @@ public class AudioController : Singleton<AudioController>
 
     public void Start()
     {
-        UIController.Inst._clickInPlayObserver.SubscribeForClick(() => { PlayTapSound(); });
     }
 
     public void PlayTapSound()

@@ -24,6 +24,10 @@ public class Ball : MonoBehaviour
     
     private void Update()
     {
+        if (MainLogic.Inst.GetState() != GameStates.play)
+        {
+            return;
+        }
         SendRay();
         Move();
     }
@@ -56,7 +60,7 @@ public class Ball : MonoBehaviour
             transform.position += fallingDir * Time.deltaTime * _speed * 3;
             if (transform.position.y < -6)
             {
-                MainLogic.Inst.GameSessionFailed();
+                MainLogic.Inst.SetGameState(GameStates.gameOver);
             }
         }
     }

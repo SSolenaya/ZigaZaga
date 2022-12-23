@@ -82,7 +82,8 @@ public class RoadBlock : MonoBehaviour
 
     public void OnTriggerExit(Collider col)
     {
-        if (col.gameObject.tag == "ball")
+        Ball ball = col.gameObject.GetComponent<Ball>();
+        if (ball != null)
         {
             SetPhysicState(BlockStates.heavy);
         }

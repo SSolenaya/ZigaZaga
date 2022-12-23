@@ -18,7 +18,7 @@ public class BallController : Singleton<BallController>
 
     public void Start()
     {
-        UIController.Inst._clickInPlayObserver.SubscribeForClick(() => {
+        WindowManager.Inst.GetWindow<InGameWindow>(TypeWindow.inGame).fullScreenClickObserver.SubscribeForClick(() => {
             _ball.ChangeDirection();
         });
     }
@@ -44,6 +44,10 @@ public class BallController : Singleton<BallController>
 
     private void Update()
     {
+        if (MainLogic.Inst.GetState() != GameStates.play)
+        {
+            return;
+        }
         MovementUpwardsImitation();
     }
 
@@ -63,6 +67,6 @@ public class BallController : Singleton<BallController>
 
     public void Clear()
     {
-        Destroy(_ball.gameObject);
+        Destroy(_ball?.gameObject);
     }
 }
