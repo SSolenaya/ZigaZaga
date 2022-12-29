@@ -14,15 +14,5 @@ public class OptionWindow : BaseUiWindow
         fullScreenClickObserver.SubscribeForClick(() => {
             WindowManager.Inst.OpenWindow(TypeWindow.mainMenu);
         });
-
-        cheatToggle.onValueChanged.AddListener((var) => {
-            MainLogic.Inst.SetCheatMode(var);
-        });
     }
-
-    public void OnEnable()
-    {
-        cheatToggle.isOn = MainLogic.Inst.GetCheatModeState();
-    }
-
 }

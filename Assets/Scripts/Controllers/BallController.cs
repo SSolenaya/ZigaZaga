@@ -10,6 +10,7 @@ public class BallController : Singleton<BallController>
     private void Start()
     {
         WindowManager.Inst.GetWindow<InGameWindow>(TypeWindow.inGame).fullScreenClickObserver.SubscribeForClick(() => {
+            if (MainLogic.Inst.GetCheatModeState()) return;
             AudioController.Inst.PlayTapSound();
             _ball.ChangeDirection();
         });
