@@ -25,7 +25,7 @@ public class RoadBlock : MonoBehaviour
     [SerializeField] protected BotTrigger _botTrigger;
 
     private BlockStates _phState;
-    private List<Gem> _gemsList = new List<Gem>();
+    public List<Gem> _gemsList = new List<Gem>();
     private Tween _tweenMove;
 
     public virtual void Setup(int scale, RoadBlock previousBlock)
@@ -60,6 +60,7 @@ public class RoadBlock : MonoBehaviour
                 _gem.transform.SetParent(gameObject.transform);
                 _gem.transform.localPosition = new Vector3(0, 1.5f, i);
                 _gem.gameObject.name = "Gem_" + i + "_on_" + gameObject.name;
+                _gem.Setup(this);
                 _gemsList.Add(_gem);
             }
         }
@@ -103,11 +104,12 @@ public class RoadBlock : MonoBehaviour
     {
         if (_gemsList != null)
         {
-            foreach (Gem gem in _gemsList)
+            List<Gem> tempList = new List<Gem>(_gemsList);
+            foreach (Gem gem in tempList)
             {
-                gem.SelfDestroy();
+                HideGem(gem);
             }
-
+            tempList.Clear();
             _gemsList.Clear();
         }
         _tweenMove?.Kill();
@@ -115,6 +117,14 @@ public class RoadBlock : MonoBehaviour
         RoadController.Inst.SendBlockToPool(this);
     }
 
+    public void HideGem(Gem g)
+    {
+       PoolManager.ReturnGemToPool(g);
+       if (_gemsList.Contains(g))
+       {
+           _gemsList.Remove(g);
+       }
+    }
 
     public virtual void SetupAsDefault() { }
 }

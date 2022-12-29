@@ -54,7 +54,7 @@ public class PoolManager : Singleton<PoolManager>
        
     }
 
-    public static void PutGemToPool(Gem target)
+    public static void ReturnGemToPool(Gem target)
     {
         target.transform.SetParent(_parentForDeactivatedGO);
         target.gameObject.SetActive(false);

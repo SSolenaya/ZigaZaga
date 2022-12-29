@@ -3,6 +3,8 @@ using UnityEngine;
 public class Gem : MonoBehaviour
 {
     private float _speed;
+    private RoadBlock _parentRoadBlock;
+
 
     public void OnEnable()
     {
@@ -10,7 +12,10 @@ public class Gem : MonoBehaviour
         _speed = MainLogic.Inst.SO.gemRotatingSpeed * Random.Range(0.8f, 1.2f);
     }
 
-  
+    public void Setup(RoadBlock rb)
+    {
+        _parentRoadBlock = rb;
+    }
 
     public void Update()
     {
@@ -19,6 +24,8 @@ public class Gem : MonoBehaviour
 
     public void SelfDestroy()
     {
-        PoolManager.PutGemToPool(this);
+       _parentRoadBlock.HideGem(this);
     }
+
+    
 }
