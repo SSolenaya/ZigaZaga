@@ -16,6 +16,7 @@ public class SOGameSettings : ScriptableObject
 
     public float yCoordForDestroy = -6;
 
-    public float ballSpeed = 2;
+    [Range(1f, 10f)]
+    public float ballSpeed = 2f;
 
 }
