@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "gameSettings", menuName = "ScriptableObject/GameSettings")]
+[CreateAssetMenu(fileName = "gameSettings", menuName = "ScriptableObject/GameSettings", order = 1)]
 public class SOGameSettings : ScriptableObject
 {
-    public int scoreForGem = 2;
+    public int scoreForGemModifier = 2;
     public int scoreForTap = 1;
 
     public float gemRotatingSpeed = 30;
@@ -16,7 +16,8 @@ public class SOGameSettings : ScriptableObject
 
     public float yCoordForDestroy = -6;
 
-    [Range(1f, 10f)]
-    public float ballSpeed = 2f;
+    public float ballMaxSpeed = 15f;
+    [Range(1f, 15f)]
+    public float ballSpeed = 1f;
 
 }

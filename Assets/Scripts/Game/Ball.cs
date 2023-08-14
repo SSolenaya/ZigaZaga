@@ -1,5 +1,6 @@
 using DG.Tweening;
 using UnityEngine;
+using Zenject;
 
 public enum BallStates
 {
@@ -10,29 +11,45 @@ public enum BallStates
 
 public class Ball : MonoBehaviour
 {
-    
     private RoadBlock _roadBlock;
     private BallStates _ballState = BallStates.wait;
     private Directions _currentDir;
     private Vector3 _currentDirectionV3;
     private float _speed;
-
-    private void Start()
-    {
-        _currentDir = Directions.right;
-        _currentDirectionV3 = Vector3.forward;
-        _speed = MainLogic.Inst.SO.ballSpeed;
-    }
+    private bool _isCheatModeOn;
+    private MainLogic _mainLogic;
+    private AudioController _audioController;
+    private UIWindowsManager _windowsManager;
+    private GameInfoManager _gameInfoManager;
 
     private void Update()
     {
-        if (MainLogic.Inst.GetState() != GameStates.play)
+        if (_mainLogic.GetState() != GameStates.play)
         {
             return;
         }
 
         SendRay();
         Move();
+    }
+
+    public void Setup(MainLogic mainLogic, AudioController audioController, UIWindowsManager windowsManager, GameInfoManager gameInfoManager)
+    {
+        _mainLogic = mainLogic;
+        _audioController = audioController;
+        _windowsManager = windowsManager;
+        _gameInfoManager = gameInfoManager;
+        _currentDir = Directions.right;
+        _currentDirectionV3 = Vector3.forward;
+        _mainLogic.SubscribeForCheatModeStateChange((newState) =>
+        {
+            _isCheatModeOn = newState;
+        }); 
+        _mainLogic.SubscribeForBallSpeedChange((newSpeed) =>
+        {
+            _speed = newSpeed;
+        });
+        
     }
 
     private void SendRay()
@@ -62,9 +79,9 @@ public class Ball : MonoBehaviour
         {
             Vector3 fallingDir = _currentDirectionV3 + Vector3.down;
             transform.position += fallingDir * Time.deltaTime * _speed * 3;
-            if (transform.position.y < MainLogic.Inst.SO.yCoordForDestroy)
+            if (transform.position.y < _mainLogic.SO.yCoordForDestroy)
             {
-                MainLogic.Inst.SetGameState(GameStates.gameOver);
+                _mainLogic.SetGameState(GameStates.gameOver);
             }
         }
     }
@@ -79,9 +96,9 @@ public class Ball : MonoBehaviour
         switch (newState)
         {
             case BallStates.fall:
-                WindowManager.Inst.CloseWindow(TypeWindow.inGame);
+                _windowsManager.CloseWindow(TypeWindow.inGame);
+                _audioController.PlayFailSound();
                 Vector3 simulationGravity = new Vector3(_currentDirectionV3.x, _currentDirectionV3.y, _currentDirectionV3.z);
-                AudioController.Inst.PlayFailSound();
                 DOVirtual.Float(1, 0, 0.5f, var => { _currentDirectionV3 = simulationGravity * var; }).SetEase(Ease.OutQuad);
                 break;
             case BallStates.move:
@@ -105,20 +122,20 @@ public class Ball : MonoBehaviour
             return;
         }
 
-        GameInfoManager.Inst.AddScore(MainLogic.Inst.SO.scoreForTap);
+        _gameInfoManager.AddScore(_mainLogic.SO.scoreForTap);
         _currentDir = _currentDir == Directions.right ? Directions.left : Directions.right;
         _currentDirectionV3 = _currentDir == Directions.right ? Vector3.forward : Vector3.right;
     }
 
     public void OnTriggerEnter(Collider col)
     {
-        if (MainLogic.Inst.GetCheatModeState())
+        if (_isCheatModeOn)
         {
             BotTrigger botTrigger = col.gameObject.GetComponent<BotTrigger>();
             if (botTrigger != null && !botTrigger.GetState())
             {
-                botTrigger.ChangeState(true);
                 ChangeDirection();
+                botTrigger.ChangeState(true);
             }
         }
 
@@ -126,9 +143,9 @@ public class Ball : MonoBehaviour
 
         if (gem != null)
         {
-            GameInfoManager.Inst.AddGem(1);
-            GameInfoManager.Inst.AddScore(MainLogic.Inst.SO.scoreForGem);
-            AudioController.Inst.PlayGemSound();
+            _gameInfoManager.AddGem(1);
+            _gameInfoManager.AddScore(_mainLogic.SO.scoreForGemModifier);
+            _audioController.PlayGemSound();
             gem.SelfDestroy();
         }
     }

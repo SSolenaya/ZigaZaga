@@ -289,6 +289,7 @@ MonoBehaviour:
   typeWindow: 3
   fullScreenClickObserver: {fileID: 1131896081558633198}
   isOpen: 0
+  cheatToggle: {fileID: 4254003429367281146}
 --- !u!1 &5154762577547170606
 GameObject:
   m_ObjectHideFlags: 0
@@ -526,3 +527,14 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 9053465210000280938, guid: c97163c632f597c44850bc6bef35a1da, type: 3}
   m_PrefabInstance: {fileID: 6326206375244284015}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &4254003429367281146 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7836952447662011797, guid: c97163c632f597c44850bc6bef35a1da, type: 3}
+  m_PrefabInstance: {fileID: 6326206375244284015}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5151d6e93a654342851877307bfe598, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

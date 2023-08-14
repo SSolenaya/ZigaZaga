@@ -4,13 +4,22 @@ using Assets.Scripts;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 
 public class PauseWindow : BaseUiWindow
 {
-    private void Start()
+    public CheatToggle cheatToggle;
+
+    private void Awake()
     {
+        cheatToggle.Setup(_mainLogic);
         fullScreenClickObserver.SubscribeForClick(() => {
-            MainLogic.Inst.SetGameState(GameStates.play);
+            _mainLogic.SetGameState(GameStates.play);
         });
+    }
+
+    private void OnEnable()
+    {
+        cheatToggle.SetActualToggleState();
     }
 }

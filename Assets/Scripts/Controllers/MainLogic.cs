@@ -1,4 +1,6 @@
+using System;
 using UnityEngine;
+using Zenject;
 
 public enum GameStates
 {
@@ -9,17 +11,45 @@ public enum GameStates
     gameOver = 20,
 }
 
-public class MainLogic : Singleton<MainLogic>
+public class MainLogic : MonoBehaviour
 {
+    [Inject] private UIWindowsManager _windowsManager;
+    [Inject] private BallController _ballController;
+    [Inject] private RoadController _roadController;
+    [Inject] private AudioController _audioController;
+    [Inject] private GameInfoManager _gameInfoManager;
     public SOGameSettings SO;
     private GameStates _currentGameState = GameStates.none;
+    private Action<bool> OnCheatModeStateChange;
+    private Action<float> OnBallSpeedeChange;
+    private float _scoreForGem;
     private bool _isCheatMode;
+    public bool IsCheatMode
+    {
+        get { return _isCheatMode;}
+        set { _isCheatMode = value;
+              OnCheatModeStateChange?.Invoke(_isCheatMode);
+            }
+    }
+    private float _ballSpeed = 1;
+    public float BallSpeed
+    {
+        get { return _ballSpeed; }
+        set
+        {
+            _ballSpeed = value;
+            OnBallSpeedeChange?.Invoke(_ballSpeed);
+        }
+    }
+
+
 
     private void Awake()
     {
         SaveManager.Init();
-        AudioController.Inst.Init();
-        _isCheatMode = false;
+        _audioController.Init();
+        IsCheatMode = false;
+        SetupBallSettings(3);
     }
 
     private void Start()
@@ -39,25 +69,25 @@ public class MainLogic : Singleton<MainLogic>
             case GameStates.none:
                 break;
             case GameStates.readyToPlay:
-                GameInfoManager.Inst.ResetOldInfo();
-                RoadController.Inst.Clear();
-                BallController.Inst.Clear();
-
-                RoadController.Inst.Generation();
-                BallController.Inst.GenerationBall();
+                _gameInfoManager.ResetOldInfo();
+                _roadController.Clear();
+                _ballController.Clear();
+                _roadController.Generation();
+                _ballController.GenerationBall();
+                SetupBallSettings(BallSpeed);
                 CameraController.Inst.ResetPosition();
-                WindowManager.Inst.OpenWindow(TypeWindow.mainMenu);
+                _windowsManager.OpenWindow(TypeWindow.mainMenu);
                 break;
             case GameStates.play:
-                WindowManager.Inst.OpenWindow(TypeWindow.inGame);
-                BallController.Inst.Play();
+                _windowsManager.OpenWindow(TypeWindow.inGame);
+                _ballController.Play();
                 break;
             case GameStates.pause:
-                WindowManager.Inst.OpenWindow(TypeWindow.pause);
+                _windowsManager.OpenWindow(TypeWindow.pause);
                 break;
             case GameStates.gameOver:
-                GameInfoManager.Inst.EndGame();
-                WindowManager.Inst.OpenWindow(TypeWindow.gameOver);
+                _gameInfoManager.EndGame();
+                _windowsManager.OpenWindow(TypeWindow.gameOver);
                 break;
 
             default:
@@ -75,11 +105,37 @@ public class MainLogic : Singleton<MainLogic>
 
     public void SetCheatMode(bool var)
     {
-        _isCheatMode = var;
+        IsCheatMode = var;
     }
 
     public bool GetCheatModeState()
     {
-        return _isCheatMode;
+        return IsCheatMode;
+    }
+
+    public void SubscribeForCheatModeStateChange(Action<bool> act)
+    {
+        OnCheatModeStateChange += act;
+    }
+
+    public void SetupBallSettings(float ballSpeed)
+    {
+        BallSpeed = ballSpeed;
+       _scoreForGem = SO.scoreForGemModifier * BallSpeed;
+    }
+
+    public float GetCurrentScoreForGem()
+    {
+        return _scoreForGem;
+    }
+
+    public float GetCurrentBallSpeed()
+    {
+        return BallSpeed;
+    }
+
+    public void SubscribeForBallSpeedChange(Action<float> act)
+    {
+        OnBallSpeedeChange += act;
     }
 }

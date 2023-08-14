@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 
 public class GameOverWindow : BaseUiWindow
 {
@@ -9,13 +10,13 @@ public class GameOverWindow : BaseUiWindow
     public void Start()
     {
         fullScreenClickObserver.SubscribeForClick(() => {
-            MainLogic.Inst.SetGameState(GameStates.readyToPlay);
+            _mainLogic.SetGameState(GameStates.readyToPlay);
         });
     }
 
     public void OnEnable()
     {
-        _currentScoreTxt.text = StringConfig.currentScore + " " + GameInfoManager.Inst.CurrentScore;
+        _currentScoreTxt.text = StringConfig.currentScore + " " + _gameInfoManager.CurrentScore;
         _bestScoreTxt.text = StringConfig.bestScore + " " + SaveManager.GetBestScore();
     }
 }

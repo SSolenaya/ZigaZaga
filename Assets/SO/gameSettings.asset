@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9bb2d237a079bc459c736e8f19d8014, type: 3}
+  m_Name: gameSettings
+  m_EditorClassIdentifier: 
+  scoreForGemModifier: 2
+  scoreForTap: 1
+  gemRotatingSpeed: 50
+  blocksCountOnStart: 10
+  maxBlockRoadSize: 6
+  visibleRoadDistance: 30
+  yCoordForDestroy: -6
+  ballMaxSpeed: 15
+  ballSpeed: 1

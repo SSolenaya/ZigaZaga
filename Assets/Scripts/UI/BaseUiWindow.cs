@@ -16,8 +16,13 @@ public class BaseUiWindow : MonoBehaviour
 {
     public TypeWindow typeWindow;
     public ClickObserver fullScreenClickObserver;
+    protected MainLogic _mainLogic;
+    protected AudioController _audioController;
+    protected UIWindowsManager _windowsManager;
+    protected GameInfoManager _gameInfoManager;
 
     [SerializeField] private bool isOpen;
+
 
     public void Open()
     {
@@ -40,6 +45,14 @@ public class BaseUiWindow : MonoBehaviour
 
         isOpen = false;
         gameObject.SetActive(false);
+    }
+
+    public void Setup(MainLogic mainLogic, AudioController audioController, UIWindowsManager windowsManager, GameInfoManager gameInfoManager)
+    {
+        _mainLogic = mainLogic;
+        _audioController = audioController;
+        _windowsManager = windowsManager;
+        _gameInfoManager = gameInfoManager;
     }
 
 }

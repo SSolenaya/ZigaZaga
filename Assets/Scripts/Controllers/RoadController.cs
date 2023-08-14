@@ -1,13 +1,17 @@
 ﻿using System.Collections.Generic;
 using Assets.Scripts;
 using UnityEngine;
+using Zenject;
 
-public class RoadController : Singleton<RoadController>
+public class RoadController : MonoBehaviour
 {
+    [Inject] private GameCanvas gameCanvas;
+    [Inject] private MainLogic _mainLogic;
+    [Inject] private BallController _ballController;
     [SerializeField] private RoadBlock _roadBlockPrefab;
     [SerializeField] private DefaultRoadBlock _platformPrefab;
     [SerializeField] private DefaultRoadBlock _defaultStartingBlockPrefab;
-    [SerializeField] private Transform _parentForRoad;
+    private Transform _parentForRoad;
 
     private DefaultRoadBlock _platformBlock;
     private DefaultRoadBlock _defaultStartingBlock;
@@ -19,12 +23,14 @@ public class RoadController : Singleton<RoadController>
 
     public void Generation()
     {
+        _parentForRoad = gameCanvas.parentForRoad;
         _platformBlock = Instantiate(_platformPrefab, _parentForRoad);
         _platformBlock.SetupAsDefault();
+        _platformBlock.Setup(_mainLogic, this);
         _platformBlock.transform.localPosition = new Vector3(0f, -2f, 0f);
 
         _defaultStartingBlock = Instantiate(_defaultStartingBlockPrefab, _parentForRoad);
-
+        _defaultStartingBlock.Setup(_mainLogic, this);
         _defaultStartingBlock.SetupAsDefault();
         _defaultStartingBlock.transform.localPosition = new Vector3(2.5f, 0f, 1.5f);
         _defaultStartingBlock.Direction = Directions.right;
@@ -32,12 +38,12 @@ public class RoadController : Singleton<RoadController>
 
 
         _startingBlock = _defaultStartingBlock;
-        GenerateRoad(MainLogic.Inst.SO.blocksCountOnStart);
+        GenerateRoad(_mainLogic.SO.blocksCountOnStart);
     }
 
     private void Update()
     {
-        if (MainLogic.Inst.GetState() != GameStates.play)
+        if (_mainLogic.GetState() != GameStates.play)
         {
             return;
         }
@@ -47,13 +53,13 @@ public class RoadController : Singleton<RoadController>
 
     private void RuntimeGeneration()
     {
-        if (BallController.Inst.GetBallStates() == BallStates.move)
+        if (_ballController.GetBallStates() == BallStates.move)
         {
             float delta = Mathf.Sqrt(Mathf.Pow(_screenCenterPos.x - CameraController.Inst.GetCameraTransform().position.x, 2)
                                      + Mathf.Pow(_screenCenterPos.y - CameraController.Inst.GetCameraTransform().position.z, 2));
-            if (delta < MainLogic.Inst.SO.visibleRoadDistance)
+            if (delta < _mainLogic.SO.visibleRoadDistance)
             {
-                Inst.GenerateRoad(1);
+                GenerateRoad(1);
             }
         }
     }
@@ -84,7 +90,7 @@ public class RoadController : Singleton<RoadController>
 
 
             int suggestedHipo = (int) (suggestedCathet * Mathf.Sqrt(2f)); //  по размеру проекци вычисляем допустимый размер нового блока
-            int maxHipo = suggestedHipo > MainLogic.Inst.SO.maxBlockRoadSize ? MainLogic.Inst.SO.maxBlockRoadSize : suggestedHipo; //  случайно выбираем его размер в допустимых пределах
+            int maxHipo = suggestedHipo > _mainLogic.SO.maxBlockRoadSize ? _mainLogic.SO.maxBlockRoadSize : suggestedHipo; //  случайно выбираем его размер в допустимых пределах
             int currentBlockScale = Random.Range(2, maxHipo);
             if (currentBlockScale < 2)
             {
@@ -93,6 +99,7 @@ public class RoadController : Singleton<RoadController>
 
             _currentBlocksAmount++;
             block.name = "Block_" + _currentBlocksAmount;
+            block.Setup(_mainLogic, this);
             block.Setup(currentBlockScale, _startingBlock);
             _startingBlock = block;
             roadBlocksList.Add(block);

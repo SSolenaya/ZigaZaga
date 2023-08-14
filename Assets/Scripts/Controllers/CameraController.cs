@@ -1,9 +1,12 @@
 ﻿using UnityEngine;
+using Zenject;
 
 public class CameraController : Singleton<CameraController>
 {
     public float BoundsSize { get; private set; } //  границы экрана
 
+    [Inject] private MainLogic _mainLogic;
+    [Inject] private BallController _ballController;
     [SerializeField] private Camera _cam;
     [SerializeField] private Transform _blockCameraTransform;
     [SerializeField] private float _speed;
@@ -18,7 +21,7 @@ public class CameraController : Singleton<CameraController>
 
     private void Start()
     {
-        _speed = MainLogic.Inst.SO.ballSpeed;
+        _speed = _mainLogic.GetCurrentBallSpeed();
     }
 
     public void ResetPosition()
@@ -33,7 +36,7 @@ public class CameraController : Singleton<CameraController>
 
     private void LateUpdate()
     {
-        if (MainLogic.Inst.GetState() != GameStates.play)
+        if (_mainLogic.GetState() != GameStates.play)
         {
             return;
         }
@@ -44,7 +47,7 @@ public class CameraController : Singleton<CameraController>
 
     public void UpdateCameraPos()
     {
-        float c = BallController.Inst.GetCoordsCenterBall();
+        float c = _ballController.GetCoordsCenterBall();
         posCamera.x = c;
         posCamera.y = 10;
         posCamera.z = c;

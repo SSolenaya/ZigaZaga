@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e89da9c3329f0cd47ba4e221ea429785, type: 3}
+  m_Name: UIWindowsPrefabsHolder
+  m_EditorClassIdentifier: 
+  listUIWindowsPrefabs:
+  - {fileID: 5584157504992867117, guid: 8d872827e26cd544f8e41e9c6e0b9560, type: 3}
+  - {fileID: 2296035415267962764, guid: 65d6da7189e531943aaedd72c58134b9, type: 3}
+  - {fileID: 7712458366344771882, guid: 3832461380ab3e74bbbe70aa3296dcfa, type: 3}
+  - {fileID: 7305159863448788215, guid: 98a4a764044bf2e4fb381389590e980a, type: 3}
+  - {fileID: 4701757933492951896, guid: c21316f63eec8564cae4e73ebfd2c0c2, type: 3}
