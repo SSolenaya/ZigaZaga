@@ -4,15 +4,25 @@ using Assets.Scripts;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 
 public class OptionWindow : BaseUiWindow
 {
-    public Toggle cheatToggle;
+    [SerializeField] private CheatToggle cheatToggle;
+    [SerializeField] private SpeedSettingsAdjust _speedSettingsAdjust;
 
-    public void Start()
+    public void Awake()
     {
+        cheatToggle.Setup(_mainLogic);
+        _speedSettingsAdjust.Setup(_mainLogic);
         fullScreenClickObserver.SubscribeForClick(() => {
-            WindowManager.Inst.OpenWindow(TypeWindow.mainMenu);
+            _windowsManager.OpenWindow(TypeWindow.mainMenu);
         });
+    }
+
+    private void OnEnable()
+    {
+        cheatToggle.SetActualToggleState();
+        _speedSettingsAdjust.SetActualSliderState();
     }
 }

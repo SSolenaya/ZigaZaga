@@ -1,8 +1,10 @@
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 
 public class MainMenuWindow : BaseUiWindow
 {
+    
     [SerializeField] private Text _bestScoreTxt;
     [SerializeField] private Text _gamesCountTxt;
     [SerializeField] private Text _totalGemsTxt;
@@ -18,7 +20,7 @@ public class MainMenuWindow : BaseUiWindow
         SetupSoundButtonFunc();
         SetupSettingsButtonFunc();
         fullScreenClickObserver.SubscribeForClick(() => {
-            MainLogic.Inst.SetGameState(GameStates.play);
+            _mainLogic.SetGameState(GameStates.play);
             SaveManager.SetPlayedGamesCount();
         });
     }
@@ -34,19 +36,19 @@ public class MainMenuWindow : BaseUiWindow
     {
         _settingsBtn.onClick.RemoveAllListeners();
         _settingsBtn.onClick.AddListener(() => {
-            AudioController.Inst.PlayClickSound();
-            WindowManager.Inst.OpenWindow(TypeWindow.options);
+            _audioController.PlayClickSound();
+            _windowsManager.OpenWindow(TypeWindow.options);
         });
     }
 
     public void SetupSoundButtonFunc()
     {
-        _soundBtn.image.sprite = AudioController.Inst.IsSoundOn ? _soundOnSprite : _soundOffSprite;
+        _soundBtn.image.sprite = _audioController.IsSoundOn ? _soundOnSprite : _soundOffSprite;
         _soundBtn.onClick.RemoveAllListeners();
         _soundBtn.onClick.AddListener(() => {
-            AudioController.Inst.PlayClickSound();
-            AudioController.Inst.SwitchSound();
-            _soundBtn.image.sprite = AudioController.Inst.IsSoundOn ? _soundOnSprite : _soundOffSprite;
+            _audioController.PlayClickSound();
+            _audioController.SwitchSound();
+            _soundBtn.image.sprite = _audioController.IsSoundOn ? _soundOnSprite : _soundOffSprite;
         });
     }
 }

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class AudioController : Singleton<AudioController>
+public class AudioController: MonoBehaviour
 {
     public bool IsSoundOn { get; private set; }
 

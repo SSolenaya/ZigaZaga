@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
+using Zenject;
 
 public enum Directions
 {
@@ -25,7 +26,9 @@ public class RoadBlock : MonoBehaviour
     [SerializeField] protected BotTrigger _botTrigger;
 
     private BlockStates _phState;
-    public List<Gem> _gemsList = new List<Gem>();
+    private List<Gem> _gemsList = new List<Gem>();
+    private MainLogic _mainLogic;
+    private RoadController _roadController;
     private Tween _tweenMove;
 
     public virtual void Setup(int scale, RoadBlock previousBlock)
@@ -46,6 +49,13 @@ public class RoadBlock : MonoBehaviour
         _botTrigger.ChangeState(false);
         InstantiatingGem();
     }
+
+    public void Setup(MainLogic mainLogic, RoadController roadController)
+    {
+        _mainLogic = mainLogic;
+        _roadController = roadController;
+
+    }
     
     private void InstantiatingGem()
     {
@@ -60,7 +70,8 @@ public class RoadBlock : MonoBehaviour
                 _gem.transform.SetParent(gameObject.transform);
                 _gem.transform.localPosition = new Vector3(0, 1.5f, i);
                 _gem.gameObject.name = "Gem_" + i + "_on_" + gameObject.name;
-                _gem.Setup(this);
+                _gem.Setup(this, _mainLogic);
+                _gem.gameObject.SetActive(true);
                 _gemsList.Add(_gem);
             }
         }
@@ -86,7 +97,7 @@ public class RoadBlock : MonoBehaviour
         switch (newState)
         {
             case BlockStates.heavy:
-                _tweenMove = transform.DOMove(transform.position + Vector3.up * MainLogic.Inst.SO.yCoordForDestroy, 1.2f).SetEase(Ease.InQuad).OnComplete(() => {
+                _tweenMove = transform.DOMove(transform.position + Vector3.up * _mainLogic.SO.yCoordForDestroy, 1.2f).SetEase(Ease.InQuad).OnComplete(() => {
                     SelfDestroy();
                 });
                 break;
@@ -114,7 +125,7 @@ public class RoadBlock : MonoBehaviour
         }
         _tweenMove?.Kill();
         SetPhysicState(BlockStates.inPool);
-        RoadController.Inst.SendBlockToPool(this);
+        _roadController.SendBlockToPool(this);
     }
 
     public void HideGem(Gem g)

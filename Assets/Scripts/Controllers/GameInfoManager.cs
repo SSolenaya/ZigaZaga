@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class GameInfoManager : Singleton<GameInfoManager>
+public class GameInfoManager
 {
     public int CurrentScore
     {

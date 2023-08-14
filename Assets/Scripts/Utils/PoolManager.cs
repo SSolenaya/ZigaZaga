@@ -1,17 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
-public class PoolManager : Singleton<PoolManager>
+public class PoolManager
 {
+    [Inject] private GameCanvas gameCanvas;
     private static Stack<RoadBlock> _roadBlockStack;
     private static Stack<Gem> _gemStack;
     private static Transform _parentForDeactivatedGO;
-    public Transform parentGO;
 
-    public void Awake()
+    [Inject]
+    private void Setup()
     {
-        _parentForDeactivatedGO = parentGO;
+        _parentForDeactivatedGO = gameCanvas.parentForPool;
         _roadBlockStack = new Stack<RoadBlock>();
         _gemStack = new Stack<Gem>();
     }
@@ -25,7 +27,7 @@ public class PoolManager : Singleton<PoolManager>
             result.gameObject.SetActive(true);
             return result;
         }
-        result = Instantiate(roadBlockPrefab, _parentForDeactivatedGO);
+        result = GameObject.Instantiate(roadBlockPrefab, _parentForDeactivatedGO);
         result.name = roadBlockPrefab.name;
         result.gameObject.SetActive(true);
         return result;
@@ -40,8 +42,8 @@ public class PoolManager : Singleton<PoolManager>
             result.gameObject.SetActive(true);
             return result;
         }
-        result = Instantiate(gemPrefab, _parentForDeactivatedGO);
-        result.gameObject.SetActive(true);
+        result = GameObject.Instantiate(gemPrefab, _parentForDeactivatedGO);
+        result.gameObject.SetActive(false);
         result.name = gemPrefab.name;
         return result;
     }

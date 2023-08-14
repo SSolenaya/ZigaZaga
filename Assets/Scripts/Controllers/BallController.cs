@@ -1,17 +1,24 @@
 ﻿using UnityEngine;
+using Zenject;
 
-public class BallController : Singleton<BallController>
+public class BallController : MonoBehaviour
 {
+    [Inject] private UIWindowsManager _windowsManager;
+    [Inject] private MainLogic _mainLogic;
+    [Inject] private GameCanvas _gameCanvas;
+    [Inject] private AudioController _audioController;
+    [Inject] private GameInfoManager _gameInfoManager;
     [SerializeField] private Ball _ballPrefab;
-    [SerializeField] private Transform _parentForRoad;
     private Ball _ball;
     private Vector3 coordsCenterBall = new Vector3();
+    
 
     private void Start()
     {
-        WindowManager.Inst.GetWindow<InGameWindow>(TypeWindow.inGame).fullScreenClickObserver.SubscribeForClick(() => {
-            if (MainLogic.Inst.GetCheatModeState()) return;
-            AudioController.Inst.PlayTapSound();
+        var _inGameWin = _windowsManager.GetWindow<InGameWindow>(TypeWindow.inGame);
+        _inGameWin.fullScreenClickObserver.SubscribeForClick(() => {
+            if (_mainLogic.GetCheatModeState()) return;
+            _audioController.PlayTapSound();
             _ball.ChangeDirection();
         });
     }
@@ -23,8 +30,9 @@ public class BallController : Singleton<BallController>
 
     public void GenerationBall()
     {
-        _ball = Instantiate(_ballPrefab, _parentForRoad);
+        _ball = Instantiate(_ballPrefab, _gameCanvas.parentForRoad);
         _ball.transform.localPosition = new Vector3(0f, 1.3f, -1.2f);
+        _ball.Setup(_mainLogic, _audioController, _windowsManager, _gameInfoManager);
         _ball.SetState(BallStates.wait);
     }
 
