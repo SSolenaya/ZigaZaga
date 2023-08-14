@@ -13,7 +13,8 @@ public enum GameStates
 
 public class MainLogic : MonoBehaviour
 {
-    [Inject] private UIWindowsManager _windowsManager;
+    [Inject] private UIWindowsManager _windowsManager; 
+    [Inject] private CameraController _cameraController;
     [Inject] private BallController _ballController;
     [Inject] private RoadController _roadController;
     [Inject] private AudioController _audioController;
@@ -75,7 +76,7 @@ public class MainLogic : MonoBehaviour
                 _roadController.Generation();
                 _ballController.GenerationBall();
                 SetupBallSettings(BallSpeed);
-                CameraController.Inst.ResetPosition();
+                _cameraController.ResetPosition();
                 _windowsManager.OpenWindow(TypeWindow.mainMenu);
                 break;
             case GameStates.play:

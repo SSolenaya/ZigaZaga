@@ -6,6 +6,7 @@ using Zenject;
 public class RoadController : MonoBehaviour
 {
     [Inject] private GameCanvas gameCanvas;
+    [Inject] private CameraController _cameraController;
     [Inject] private MainLogic _mainLogic;
     [Inject] private BallController _ballController;
     [SerializeField] private RoadBlock _roadBlockPrefab;
@@ -55,8 +56,8 @@ public class RoadController : MonoBehaviour
     {
         if (_ballController.GetBallStates() == BallStates.move)
         {
-            float delta = Mathf.Sqrt(Mathf.Pow(_screenCenterPos.x - CameraController.Inst.GetCameraTransform().position.x, 2)
-                                     + Mathf.Pow(_screenCenterPos.y - CameraController.Inst.GetCameraTransform().position.z, 2));
+            float delta = Mathf.Sqrt(Mathf.Pow(_screenCenterPos.x - _cameraController.GetCameraTransform().position.x, 2)
+                                     + Mathf.Pow(_screenCenterPos.y - _cameraController.GetCameraTransform().position.z, 2));
             if (delta < _mainLogic.SO.visibleRoadDistance)
             {
                 GenerateRoad(1);
@@ -79,13 +80,13 @@ public class RoadController : MonoBehaviour
             if (startBlockPos.x >= centerXZ && _startingBlock.Direction == Directions.left //  вычисление размера проекции допустимого размера блока
                 || startBlockPos.x <= centerXZ && _startingBlock.Direction == Directions.right)
             {
-                suggestedCathet = CameraController.Inst.BoundsSize - dis;
+                suggestedCathet = _cameraController.BoundsSize - dis;
             }
 
             if (startBlockPos.x <= centerXZ && _startingBlock.Direction == Directions.left
                 || startBlockPos.x >= centerXZ && _startingBlock.Direction == Directions.right)
             {
-                suggestedCathet = CameraController.Inst.BoundsSize + dis;
+                suggestedCathet = _cameraController.BoundsSize + dis;
             }
 
 

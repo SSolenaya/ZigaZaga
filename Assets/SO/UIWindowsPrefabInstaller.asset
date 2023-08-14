@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _uiWinsPrefabHolder: {fileID: 11400000, guid: e95dd3babc6e7984d84031b0b0514cb3, type: 2}
   _gameCanvasPrefab: {fileID: 5489838535508113253, guid: 85c349d20210bae44af9aa87259b576a, type: 3}
+  _cameraControllerPrefab: {fileID: 7158260500874721910, guid: d33d4860db1e972439469dea596f4d04, type: 3}
   _uIWindowsManagerPrefab: {fileID: 2787892614710637776, guid: ca25ee7b1b915a84b993fd8997cf770b, type: 3}
   _mainLogicPrefab: {fileID: 7591190462002228231, guid: 7c5f09e8a1c922a4983195b46c52120a, type: 3}
   _audioControllerPrefab: {fileID: 8429150831997548187, guid: 6e4c92b20ddc8ad498b5a9018ef2b0e8, type: 3}
-  _ballController: {fileID: 3410025753271703467, guid: b922b76701300884a9b81a2fd891b999, type: 3}
-  _roadController: {fileID: 7803665879746629915, guid: 974bb1af4ee47dc46b24642da89cb31f, type: 3}
+  _ballControllerPrefab: {fileID: 3410025753271703467, guid: b922b76701300884a9b81a2fd891b999, type: 3}
+  _roadControllerPrefab: {fileID: 7803665879746629915, guid: 974bb1af4ee47dc46b24642da89cb31f, type: 3}
