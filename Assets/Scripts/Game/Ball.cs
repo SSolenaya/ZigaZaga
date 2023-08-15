@@ -21,6 +21,7 @@ public class Ball : MonoBehaviour
     private AudioController _audioController;
     private UIWindowsManager _windowsManager;
     private GameInfoManager _gameInfoManager;
+    private MeshRenderer _meshRenderer;
 
     private void Update()
     {
@@ -35,6 +36,7 @@ public class Ball : MonoBehaviour
 
     public void Setup(MainLogic mainLogic, AudioController audioController, UIWindowsManager windowsManager, GameInfoManager gameInfoManager)
     {
+        _meshRenderer = GetComponent<MeshRenderer>();
         _mainLogic = mainLogic;
         _audioController = audioController;
         _windowsManager = windowsManager;
@@ -49,7 +51,8 @@ public class Ball : MonoBehaviour
         {
             _speed = newSpeed;
         });
-        
+
+        ChangeSkin(mainLogic.BallMaterialsManagerSO.GetRandomSkinData());
     }
 
     private void SendRay()
@@ -72,14 +75,24 @@ public class Ball : MonoBehaviour
     {
         if (_ballState == BallStates.move)
         {
-            transform.Translate(_currentDirectionV3 * Time.deltaTime * _speed);
+            transform.Translate(_currentDirectionV3 * Time.deltaTime * _speed);             //  TODO: rotate only view
+                                                                                            //bool isForwardMove = _currentDir == Directions.right;                    
+                                                                                            //if (isForwardMove)
+                                                                                            //{
+                                                                                            //    transform.Rotate(3.0f, 0.0f, 0.0f);
+                                                                                            //}
+                                                                                            //else
+                                                                                            //{
+                                                                                            //    transform.Rotate(0.0f, 0.0f, 3.0f);
+                                                                                            //}
+
         }
 
         if (_ballState == BallStates.fall)
         {
             Vector3 fallingDir = _currentDirectionV3 + Vector3.down;
             transform.position += fallingDir * Time.deltaTime * _speed * 3;
-            if (transform.position.y < _mainLogic.SO.yCoordForDestroy)
+            if (transform.position.y < _mainLogic.GameSettingsSO.yCoordForDestroy)
             {
                 _mainLogic.SetGameState(GameStates.gameOver);
             }
@@ -122,7 +135,7 @@ public class Ball : MonoBehaviour
             return;
         }
 
-        _gameInfoManager.AddScore(_mainLogic.SO.scoreForTap);
+        _gameInfoManager.AddScore(_mainLogic.GameSettingsSO.scoreForTap);
         _currentDir = _currentDir == Directions.right ? Directions.left : Directions.right;
         _currentDirectionV3 = _currentDir == Directions.right ? Vector3.forward : Vector3.right;
     }
@@ -144,7 +157,7 @@ public class Ball : MonoBehaviour
         if (gem != null)
         {
             _gameInfoManager.AddGem(1);
-            _gameInfoManager.AddScore(_mainLogic.SO.scoreForGemModifier);
+            _gameInfoManager.AddScore(_mainLogic.GameSettingsSO.scoreForGemModifier);
             _audioController.PlayGemSound();
             gem.SelfDestroy();
         }
@@ -157,6 +170,11 @@ public class Ball : MonoBehaviour
         {
             roadBlock.SetPhysicState(BlockStates.heavy);
         }
+    }
+
+    public void ChangeSkin(BallSkinData newData)
+    {
+        _meshRenderer.material.mainTexture = newData.texture;
     }
 
 }

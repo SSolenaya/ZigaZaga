@@ -10,7 +10,7 @@ public class Gem : MonoBehaviour
     public void OnEnable()
     {
         transform.localEulerAngles += Vector3.up * Random.Range(0f, 360f);
-        _speed = _mainLogic.SO.gemRotatingSpeed * Random.Range(0.8f, 1.2f);
+        _speed = _mainLogic.GameSettingsSO.gemRotatingSpeed * Random.Range(0.8f, 1.2f);
     }
 
     public void Setup(RoadBlock parentBlock, MainLogic mainLogic)

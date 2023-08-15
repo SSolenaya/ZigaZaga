@@ -39,7 +39,7 @@ public class RoadController : MonoBehaviour
 
 
         _startingBlock = _defaultStartingBlock;
-        GenerateRoad(_mainLogic.SO.blocksCountOnStart);
+        GenerateRoad(_mainLogic.GameSettingsSO.blocksCountOnStart);
     }
 
     private void Update()
@@ -58,7 +58,7 @@ public class RoadController : MonoBehaviour
         {
             float delta = Mathf.Sqrt(Mathf.Pow(_screenCenterPos.x - _cameraController.GetCameraTransform().position.x, 2)
                                      + Mathf.Pow(_screenCenterPos.y - _cameraController.GetCameraTransform().position.z, 2));
-            if (delta < _mainLogic.SO.visibleRoadDistance)
+            if (delta < _mainLogic.GameSettingsSO.visibleRoadDistance)
             {
                 GenerateRoad(1);
             }
@@ -91,7 +91,7 @@ public class RoadController : MonoBehaviour
 
 
             int suggestedHipo = (int) (suggestedCathet * Mathf.Sqrt(2f)); //  по размеру проекци вычисляем допустимый размер нового блока
-            int maxHipo = suggestedHipo > _mainLogic.SO.maxBlockRoadSize ? _mainLogic.SO.maxBlockRoadSize : suggestedHipo; //  случайно выбираем его размер в допустимых пределах
+            int maxHipo = suggestedHipo > _mainLogic.GameSettingsSO.maxBlockRoadSize ? _mainLogic.GameSettingsSO.maxBlockRoadSize : suggestedHipo; //  случайно выбираем его размер в допустимых пределах
             int currentBlockScale = Random.Range(2, maxHipo);
             if (currentBlockScale < 2)
             {

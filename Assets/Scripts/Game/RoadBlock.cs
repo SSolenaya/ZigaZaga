@@ -97,7 +97,7 @@ public class RoadBlock : MonoBehaviour
         switch (newState)
         {
             case BlockStates.heavy:
-                _tweenMove = transform.DOMove(transform.position + Vector3.up * _mainLogic.SO.yCoordForDestroy, 1.2f).SetEase(Ease.InQuad).OnComplete(() => {
+                _tweenMove = transform.DOMove(transform.position + Vector3.up * _mainLogic.GameSettingsSO.yCoordForDestroy, 1.2f).SetEase(Ease.InQuad).OnComplete(() => {
                     SelfDestroy();
                 });
                 break;

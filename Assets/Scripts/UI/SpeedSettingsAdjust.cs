@@ -17,7 +17,7 @@ public class SpeedSettingsAdjust : MonoBehaviour
     {
         _mainLogic = mainLogic;
         _speedSlider.minValue = 1;
-        _speedSlider.maxValue = _mainLogic.SO.ballMaxSpeed;
+        _speedSlider.maxValue = _mainLogic.GameSettingsSO.ballMaxSpeed;
         _speedSlider.wholeNumbers = true;
         _speedSlider.onValueChanged.AddListener(ChangeSettings);
     }
@@ -25,7 +25,7 @@ public class SpeedSettingsAdjust : MonoBehaviour
     private void ChangeSettings(float newValue)
     {
         var newSpeed = newValue;
-        var newScore = _mainLogic.SO.scoreForGemModifier * newSpeed;
+        var newScore = _mainLogic.GameSettingsSO.scoreForGemModifier * newSpeed;
         _speedValue.text = newSpeed.ToString();
         _scoreValue.text = newScore.ToString();
         _mainLogic.SetupBallSettings(newSpeed);

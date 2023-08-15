@@ -56,4 +56,9 @@ public class BallController : MonoBehaviour
     {
         Destroy(_ball?.gameObject);
     }
+
+    public void ChangeBallSkin(BallSkinData newData)
+    {
+        _ball.ChangeSkin(newData);
+    }
 }
