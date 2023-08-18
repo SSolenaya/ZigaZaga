@@ -44,6 +44,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f1a43e207c99f249b6c3596a23fbf77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  WindowsManager: {fileID: 0}
-  _ballPrefab: {fileID: 2708641922040760393, guid: 07d45dc84db4ca74bb8464fac9967ff0, type: 3}
-  _parentForRoad: {fileID: 0}
+  _ballPrefab: {fileID: 9094054203831659908, guid: bae2f62dac625bd47aeeaa0268a0ad85, type: 3}

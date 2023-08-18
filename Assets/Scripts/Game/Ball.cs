@@ -11,6 +11,8 @@ public enum BallStates
 
 public class Ball : MonoBehaviour
 {
+    [SerializeField] BallView _ballView;
+    [SerializeField] BallBody _ballBody;
     private RoadBlock _roadBlock;
     private BallStates _ballState = BallStates.wait;
     private Directions _currentDir;
@@ -21,7 +23,7 @@ public class Ball : MonoBehaviour
     private AudioController _audioController;
     private UIWindowsManager _windowsManager;
     private GameInfoManager _gameInfoManager;
-    private MeshRenderer _meshRenderer;
+
 
     private void Update()
     {
@@ -36,7 +38,6 @@ public class Ball : MonoBehaviour
 
     public void Setup(MainLogic mainLogic, AudioController audioController, UIWindowsManager windowsManager, GameInfoManager gameInfoManager)
     {
-        _meshRenderer = GetComponent<MeshRenderer>();
         _mainLogic = mainLogic;
         _audioController = audioController;
         _windowsManager = windowsManager;
@@ -45,14 +46,18 @@ public class Ball : MonoBehaviour
         _currentDirectionV3 = Vector3.forward;
         _mainLogic.SubscribeForCheatModeStateChange((newState) =>
         {
-            _isCheatModeOn = newState;
+            _ballBody.SetCheatMode(newState);
+
         }); 
         _mainLogic.SubscribeForBallSpeedChange((newSpeed) =>
         {
             _speed = newSpeed;
+            _ballView.ChangeViewRotationSpeed(_speed);
         });
 
         ChangeSkin(mainLogic.BallMaterialsManagerSO.GetRandomSkinData());
+        _ballBody.SubscribeForTriggerEnter(OnTrigEnter);
+        _ballBody.SubscribeForTriggerExit(OnTrigExit);
     }
 
     private void SendRay()
@@ -75,17 +80,9 @@ public class Ball : MonoBehaviour
     {
         if (_ballState == BallStates.move)
         {
-            transform.Translate(_currentDirectionV3 * Time.deltaTime * _speed);             //  TODO: rotate only view
-                                                                                            //bool isForwardMove = _currentDir == Directions.right;                    
-                                                                                            //if (isForwardMove)
-                                                                                            //{
-                                                                                            //    transform.Rotate(3.0f, 0.0f, 0.0f);
-                                                                                            //}
-                                                                                            //else
-                                                                                            //{
-                                                                                            //    transform.Rotate(0.0f, 0.0f, 3.0f);
-                                                                                            //}
-
+            transform.Translate(_currentDirectionV3 * Time.deltaTime * _speed);
+            bool isForwardMove = _currentDir == Directions.right;                    
+            _ballView.RotateView(isForwardMove);
         }
 
         if (_ballState == BallStates.fall)
@@ -140,41 +137,23 @@ public class Ball : MonoBehaviour
         _currentDirectionV3 = _currentDir == Directions.right ? Vector3.forward : Vector3.right;
     }
 
-    public void OnTriggerEnter(Collider col)
+    public void OnTrigEnter()
     {
-        if (_isCheatModeOn)
-        {
-            BotTrigger botTrigger = col.gameObject.GetComponent<BotTrigger>();
-            if (botTrigger != null && !botTrigger.GetState())
-            {
-                ChangeDirection();
-                botTrigger.ChangeState(true);
-            }
-        }
-
-        Gem gem = col.gameObject.GetComponent<Gem>();
-
-        if (gem != null)
-        {
-            _gameInfoManager.AddGem(1);
-            _gameInfoManager.AddScore(_mainLogic.GameSettingsSO.scoreForGemModifier);
-            _audioController.PlayGemSound();
-            gem.SelfDestroy();
-        }
+        ChangeDirection();
+        _ballView.OnTrigEnter();
     }
 
-    public void OnTriggerExit(Collider col)
+    public void OnTrigExit()
     {
-        RoadBlock roadBlock = col.gameObject.transform.parent.GetComponent<RoadBlock>();
-        if (roadBlock != null)
-        {
-            roadBlock.SetPhysicState(BlockStates.heavy);
-        }
+        _gameInfoManager.AddGem(1);
+        _gameInfoManager.AddScore(_mainLogic.GameSettingsSO.scoreForGemModifier);
+        _audioController.PlayGemSound();
     }
+
 
     public void ChangeSkin(BallSkinData newData)
     {
-        _meshRenderer.material.mainTexture = newData.texture;
+        _ballView.ChangeSkin(newData);
     }
 
 }
