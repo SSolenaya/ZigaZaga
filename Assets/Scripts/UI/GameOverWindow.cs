@@ -1,11 +1,12 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 
 public class GameOverWindow : BaseUiWindow
 {
-    [SerializeField] private Text _currentScoreTxt;
-    [SerializeField] private Text _bestScoreTxt;
+    [SerializeField] private TMP_Text _currentScoreTxt;
+    [SerializeField] private TMP_Text _bestScoreTxt;
 
     public void Start()
     {
@@ -16,7 +17,7 @@ public class GameOverWindow : BaseUiWindow
 
     public void OnEnable()
     {
-        _currentScoreTxt.text = StringConfig.currentScore + " " + _gameInfoManager.CurrentScore;
-        _bestScoreTxt.text = StringConfig.bestScore + " " + SaveManager.GetBestScore();
+        _currentScoreTxt.text = _gameInfoManager.CurrentScore.ToString();
+        _bestScoreTxt.text = SaveManager.GetBestScore().ToString();
     }
 }
