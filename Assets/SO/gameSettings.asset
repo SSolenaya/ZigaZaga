@@ -21,3 +21,4 @@ MonoBehaviour:
   yCoordForDestroy: -6
   ballMaxSpeed: 15
   ballSpeed: 1
+  IsBallRuningOnMath: 1

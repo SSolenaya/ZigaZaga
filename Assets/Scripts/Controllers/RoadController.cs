@@ -36,7 +36,7 @@ public class RoadController : MonoBehaviour
         _defaultStartingBlock.transform.localPosition = new Vector3(2.5f, 0f, 1.5f);
         _defaultStartingBlock.Direction = Directions.right;
         _defaultStartingBlock.Scale = 2;
-
+        _platformBlock.SetNextBlock(_defaultStartingBlock);
 
         _startingBlock = _defaultStartingBlock;
         GenerateRoad(_mainLogic.GameSettingsSO.blocksCountOnStart);
@@ -50,6 +50,11 @@ public class RoadController : MonoBehaviour
         }
 
         RuntimeGeneration();
+    }
+
+    public RoadBlock GetStartingPlatformRoadBlock()
+    {
+        return _platformBlock;
     }
 
     private void RuntimeGeneration()

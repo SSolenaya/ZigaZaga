@@ -6,26 +6,33 @@ using UnityEngine;
 public class BallBody : MonoBehaviour
 {
     private bool _isCheatModeOn;
+    private bool _isBallOnMath;
     private Action _onTriggerEnterAction;
-    private Action _onTriggerExitAction;
+    private Action _onGemTriggerAction;
 
     public void SubscribeForTriggerEnter(Action action) 
     { 
     _onTriggerEnterAction = action;
     }
 
-    public void SubscribeForTriggerExit(Action action)
+    public void SubscribeForGemTrigger(Action action)
     {
-        _onTriggerExitAction = action;
+        _onGemTriggerAction = action;
     }
 
     public void SetCheatMode(bool newCheatMode)
     {
         _isCheatModeOn = newCheatMode;
     }
+
+    public void SetBallMovementMode(bool isBallMovedByMath)
+    {
+        _isBallOnMath = isBallMovedByMath;
+    }
+
     public void OnTriggerEnter(Collider col)
     {
-        if (_isCheatModeOn)
+        if (_isCheatModeOn && !_isBallOnMath)                                   // ball is running on physics
         {
             BotTrigger botTrigger = col.gameObject.GetComponent<BotTrigger>();
             if (botTrigger != null && !botTrigger.GetState())
@@ -39,7 +46,7 @@ public class BallBody : MonoBehaviour
 
         if (gem != null)
         {
-            _onTriggerExitAction?.Invoke();
+            _onGemTriggerAction?.Invoke();
             gem.SelfDestroy();
         }
     }

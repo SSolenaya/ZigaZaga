@@ -25,10 +25,11 @@ public class RoadBlock : MonoBehaviour
     [SerializeField] private GameObject _view;
     [SerializeField] protected BotTrigger _botTrigger;
 
-    private BlockStates _phState;
-    private List<Gem> _gemsList = new List<Gem>();
-    private MainLogic _mainLogic;
     private RoadController _roadController;
+    private MainLogic _mainLogic;
+    private RoadBlock _nextBlock;
+    private BlockStates _physicState;
+    private List<Gem> _gemsList = new List<Gem>();
     private Tween _tweenMove;
 
     public virtual void Setup(int scale, RoadBlock previousBlock)
@@ -48,6 +49,7 @@ public class RoadBlock : MonoBehaviour
         _botTrigger.transform.localPosition = new Vector3(0, 1, Scale + 0.4f);
         _botTrigger.ChangeState(false);
         InstantiatingGem();
+        previousBlock.SetNextBlock(this);
     }
 
     public void Setup(MainLogic mainLogic, RoadController roadController)
@@ -56,7 +58,17 @@ public class RoadBlock : MonoBehaviour
         _roadController = roadController;
 
     }
-    
+
+    public void SetNextBlock (RoadBlock nextBlock)
+    {
+        _nextBlock = nextBlock;
+    }
+
+    public RoadBlock GetNextBlock()
+    {
+        return _nextBlock;
+    }
+
     private void InstantiatingGem()
     {
         _gemsList = new List<Gem>(Scale);
@@ -85,11 +97,19 @@ public class RoadBlock : MonoBehaviour
         return myEndPos;
     }
 
+    public Vector3 GetTurningPoint()
+    {
+        float xCoord = transform.position.x + (Direction == Directions.right ? Scale : 0f);
+        float zCoord = transform.position.z + (Direction == Directions.left ? Scale : 0f);
+        Vector3 myEndPos = new Vector3(xCoord, transform.position.y, zCoord);
+        return myEndPos;
+    }
+
 
 
     public void SetPhysicState(BlockStates newState)
     {
-        if (_phState == newState)
+        if (_physicState == newState)
         {
             return;
         }
@@ -107,7 +127,7 @@ public class RoadBlock : MonoBehaviour
                 break;
         }
 
-        _phState = newState;
+        _physicState = newState;
     }
 
 

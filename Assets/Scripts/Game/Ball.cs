@@ -1,6 +1,7 @@
 using DG.Tweening;
 using UnityEngine;
 using Zenject;
+using static UnityEngine.GraphicsBuffer;
 
 public enum BallStates
 {
@@ -13,7 +14,7 @@ public class Ball : MonoBehaviour
 {
     [SerializeField] BallView _ballView;
     [SerializeField] BallBody _ballBody;
-    private RoadBlock _roadBlock;
+    private RoadBlock _currentRoadBlock;
     private BallStates _ballState = BallStates.wait;
     private Directions _currentDir;
     private Vector3 _currentDirectionV3;
@@ -23,6 +24,7 @@ public class Ball : MonoBehaviour
     private AudioController _audioController;
     private UIWindowsManager _windowsManager;
     private GameInfoManager _gameInfoManager;
+    private Vector3 _nextTurningPoint;
 
 
     private void Update()
@@ -36,7 +38,7 @@ public class Ball : MonoBehaviour
         Move();
     }
 
-    public void Setup(MainLogic mainLogic, AudioController audioController, UIWindowsManager windowsManager, GameInfoManager gameInfoManager)
+    public void Setup(MainLogic mainLogic, AudioController audioController, UIWindowsManager windowsManager, GameInfoManager gameInfoManager, RoadController roadController)
     {
         _mainLogic = mainLogic;
         _audioController = audioController;
@@ -44,20 +46,28 @@ public class Ball : MonoBehaviour
         _gameInfoManager = gameInfoManager;
         _currentDir = Directions.right;
         _currentDirectionV3 = Vector3.forward;
+        _currentRoadBlock = roadController.GetStartingPlatformRoadBlock();
         _mainLogic.SubscribeForCheatModeStateChange((newState) =>
         {
             _ballBody.SetCheatMode(newState);
-
+            _isCheatModeOn = newState;
         }); 
         _mainLogic.SubscribeForBallSpeedChange((newSpeed) =>
         {
             _speed = newSpeed;
             _ballView.ChangeViewRotationSpeed(_speed);
         });
-
+        _ballBody.SetBallMovementMode(_mainLogic.GameSettingsSO.IsBallRuningOnMath);
         ChangeSkin(mainLogic.BallMaterialsManagerSO.GetRandomSkinData());
-        _ballBody.SubscribeForTriggerEnter(OnTrigEnter);
-        _ballBody.SubscribeForTriggerExit(OnTrigExit);
+        _ballBody.SubscribeForTriggerEnter(OnReachingTurningPoint);
+        _ballBody.SubscribeForGemTrigger(OnGemCollision);
+    }
+
+    private void SetTurningPoints()
+    {
+        _currentRoadBlock = _currentRoadBlock.GetNextBlock();
+        Vector3 vecHelper = _currentRoadBlock.GetTurningPoint();
+        _nextTurningPoint = new Vector3(vecHelper.x, transform.position.y, vecHelper.z);
     }
 
     private void SendRay()
@@ -68,7 +78,7 @@ public class Ball : MonoBehaviour
         }
 
         Ray ray = new Ray(transform.position, -Vector3.up);
-        Debug.DrawRay(ray.origin, ray.direction * 10, Color.green);
+        //Debug.DrawRay(ray.origin, ray.direction * 10, Color.green);
         RaycastHit hit;
         if (!Physics.Raycast(ray, out hit))
         {
@@ -83,6 +93,17 @@ public class Ball : MonoBehaviour
             transform.Translate(_currentDirectionV3 * Time.deltaTime * _speed);
             bool isForwardMove = _currentDir == Directions.right;                    
             _ballView.RotateView(isForwardMove);
+
+            if (_mainLogic.GameSettingsSO.IsBallRuningOnMath)
+            {
+                var maxRange = 0.1f;
+                var distance = Vector3.Distance(_nextTurningPoint, transform.position);
+                Debug.Log("distance = " + distance);
+                if (_isCheatModeOn & distance < maxRange)
+                {
+                    OnReachingTurningPoint();
+                }
+            }
         }
 
         if (_ballState == BallStates.fall)
@@ -137,13 +158,14 @@ public class Ball : MonoBehaviour
         _currentDirectionV3 = _currentDir == Directions.right ? Vector3.forward : Vector3.right;
     }
 
-    public void OnTrigEnter()
+    public void OnReachingTurningPoint()
     {
+        SetTurningPoints();
         ChangeDirection();
         _ballView.OnTrigEnter();
     }
 
-    public void OnTrigExit()
+    public void OnGemCollision()
     {
         _gameInfoManager.AddGem(1);
         _gameInfoManager.AddScore(_mainLogic.GameSettingsSO.scoreForGemModifier);

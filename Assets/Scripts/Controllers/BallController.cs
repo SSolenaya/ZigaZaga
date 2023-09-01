@@ -5,6 +5,7 @@ public class BallController : MonoBehaviour
 {
     [Inject] private UIWindowsManager _windowsManager;
     [Inject] private MainLogic _mainLogic;
+    [Inject] private RoadController _roadController;
     [Inject] private GameCanvas _gameCanvas;
     [Inject] private AudioController _audioController;
     [Inject] private GameInfoManager _gameInfoManager;
@@ -19,20 +20,20 @@ public class BallController : MonoBehaviour
         _inGameWin.fullScreenClickObserver.SubscribeForClick(() => {
             if (_mainLogic.GetCheatModeState()) return;
             _audioController.PlayTapSound();
-            _ball.ChangeDirection();
+            BallChangeDirection();
         });
     }
 
     public void BallChangeDirection()
     {
-        _ball?.ChangeDirection();
+        _ball?.OnReachingTurningPoint();
     }
 
     public void GenerationBall()
     {
         _ball = Instantiate(_ballPrefab, _gameCanvas.parentForRoad);
         _ball.transform.localPosition = new Vector3(0f, 1.3f, -1.2f);
-        _ball.Setup(_mainLogic, _audioController, _windowsManager, _gameInfoManager);
+        _ball.Setup(_mainLogic, _audioController, _windowsManager, _gameInfoManager, _roadController);
         _ball.SetState(BallStates.wait);
     }
 

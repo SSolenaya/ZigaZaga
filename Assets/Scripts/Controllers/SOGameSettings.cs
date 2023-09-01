@@ -20,4 +20,6 @@ public class SOGameSettings : ScriptableObject
     [Range(1f, 15f)]
     public float ballSpeed = 1f;
 
+    public bool IsBallRuningOnMath;
+
 }
