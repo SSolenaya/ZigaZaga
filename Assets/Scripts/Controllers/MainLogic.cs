@@ -51,7 +51,7 @@ public class MainLogic : MonoBehaviour
         SaveManager.Init();
         _audioController.Init();
         IsCheatMode = false;
-        SetupBallSettings(3);
+        SetupBallSettings(1);
     }
 
     private void Start()

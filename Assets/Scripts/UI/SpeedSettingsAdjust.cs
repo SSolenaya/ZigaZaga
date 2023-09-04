@@ -33,7 +33,12 @@ public class SpeedSettingsAdjust : MonoBehaviour
 
     public void SetActualSliderState()
     {
-        _speedSlider.value = _mainLogic.GetCurrentBallSpeed();
+        var newSpeed = _mainLogic.GetCurrentBallSpeed();
+        _speedSlider.value = newSpeed;
+        var newScore = _mainLogic.GameSettingsSO.scoreForGemModifier * newSpeed;
+        _speedValue.text = newSpeed.ToString();
+        _scoreValue.text = newScore.ToString();
     }
+
 
 }

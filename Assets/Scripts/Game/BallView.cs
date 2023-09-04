@@ -34,7 +34,7 @@ public class BallView : MonoBehaviour
         }
     }
 
-    public void OnTrigEnter()
+    public void OnBallTurning()
     {
         _angleHelper = 0;
         _rotationHelperVec = transform.eulerAngles;

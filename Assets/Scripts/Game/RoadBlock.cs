@@ -97,7 +97,7 @@ public class RoadBlock : MonoBehaviour
         return myEndPos;
     }
 
-    public Vector3 GetTurningPoint()
+    public virtual Vector3 GetTurningPoint()
     {
         float xCoord = transform.position.x + (Direction == Directions.right ? Scale : 0f);
         float zCoord = transform.position.z + (Direction == Directions.left ? Scale : 0f);

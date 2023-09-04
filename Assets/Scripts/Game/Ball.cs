@@ -47,6 +47,7 @@ public class Ball : MonoBehaviour
         _currentDir = Directions.right;
         _currentDirectionV3 = Vector3.forward;
         _currentRoadBlock = roadController.GetStartingPlatformRoadBlock();
+        SetTurningPoints();
         _mainLogic.SubscribeForCheatModeStateChange((newState) =>
         {
             _ballBody.SetCheatMode(newState);
@@ -63,9 +64,10 @@ public class Ball : MonoBehaviour
         _ballBody.SubscribeForGemTrigger(OnGemCollision);
     }
 
+
+
     private void SetTurningPoints()
     {
-        _currentRoadBlock = _currentRoadBlock.GetNextBlock();
         Vector3 vecHelper = _currentRoadBlock.GetTurningPoint();
         _nextTurningPoint = new Vector3(vecHelper.x, transform.position.y, vecHelper.z);
     }
@@ -80,30 +82,37 @@ public class Ball : MonoBehaviour
         Ray ray = new Ray(transform.position, -Vector3.up);
         //Debug.DrawRay(ray.origin, ray.direction * 10, Color.green);
         RaycastHit hit;
-        if (!Physics.Raycast(ray, out hit))
+        if (!Physics.Raycast(ray, out hit) && !_isCheatModeOn)
         {
-            SetState(BallStates.fall);
+           SetState(BallStates.fall);
         }
     }
 
+    private float lastDistanseToTurningPoint = -1f;
+
     private void Move()
     {
+        
         if (_ballState == BallStates.move)
         {
-            transform.Translate(_currentDirectionV3 * Time.deltaTime * _speed);
-            bool isForwardMove = _currentDir == Directions.right;                    
-            _ballView.RotateView(isForwardMove);
 
-            if (_mainLogic.GameSettingsSO.IsBallRuningOnMath)
+            Vector3 nextPos = transform.position + _currentDirectionV3 * Time.deltaTime * _speed;
+            bool isForwardMove = _currentDir == Directions.right;                    
+            if (_isCheatModeOn && _mainLogic.GameSettingsSO.IsBallRuningOnMath)
             {
-                var maxRange = 0.1f;
-                var distance = Vector3.Distance(_nextTurningPoint, transform.position);
-                Debug.Log("distance = " + distance);
-                if (_isCheatModeOn & distance < maxRange)
+                var currentDistance = Vector3.Distance(_nextTurningPoint, nextPos);
+                if (lastDistanseToTurningPoint !=-1 && (currentDistance > lastDistanseToTurningPoint))
                 {
                     OnReachingTurningPoint();
+                    nextPos = _nextTurningPoint;
+                    lastDistanseToTurningPoint = -1f;
+                } else
+                {
+                    lastDistanseToTurningPoint = currentDistance;
                 }
             }
+            transform.position = nextPos;
+            _ballView.RotateView(isForwardMove);
         }
 
         if (_ballState == BallStates.fall)
@@ -152,7 +161,7 @@ public class Ball : MonoBehaviour
         {
             return;
         }
-
+        _ballView.OnBallTurning();
         _gameInfoManager.AddScore(_mainLogic.GameSettingsSO.scoreForTap);
         _currentDir = _currentDir == Directions.right ? Directions.left : Directions.right;
         _currentDirectionV3 = _currentDir == Directions.right ? Vector3.forward : Vector3.right;
@@ -160,9 +169,9 @@ public class Ball : MonoBehaviour
 
     public void OnReachingTurningPoint()
     {
+        _currentRoadBlock = _currentRoadBlock.GetNextBlock();
         SetTurningPoints();
         ChangeDirection();
-        _ballView.OnTrigEnter();
     }
 
     public void OnGemCollision()

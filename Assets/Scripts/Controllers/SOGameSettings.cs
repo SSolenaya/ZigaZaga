@@ -16,10 +16,8 @@ public class SOGameSettings : ScriptableObject
 
     public float yCoordForDestroy = -6;
 
-    public float ballMaxSpeed = 15f;
-    [Range(1f, 15f)]
-    public float ballSpeed = 1f;
-
+    public float ballMaxSpeed = 120f;
+    
     public bool IsBallRuningOnMath;
 
 }
