@@ -13,15 +13,17 @@ public enum GameStates
 
 public class MainLogic : MonoBehaviour
 {
-    [Inject] private UIWindowsManager _windowsManager;
+    [Inject] private UIWindowsManager _windowsManager; 
+    [Inject] private CameraController _cameraController;
     [Inject] private BallController _ballController;
     [Inject] private RoadController _roadController;
     [Inject] private AudioController _audioController;
     [Inject] private GameInfoManager _gameInfoManager;
-    public SOGameSettings SO;
+    public SOGameSettings GameSettingsSO;
+    public BallMaterialsManager BallMaterialsManagerSO;
     private GameStates _currentGameState = GameStates.none;
     private Action<bool> OnCheatModeStateChange;
-    private Action<float> OnBallSpeedeChange;
+    private Action<float> OnBallSpeedChange;
     private float _scoreForGem;
     private bool _isCheatMode;
     public bool IsCheatMode
@@ -38,7 +40,7 @@ public class MainLogic : MonoBehaviour
         set
         {
             _ballSpeed = value;
-            OnBallSpeedeChange?.Invoke(_ballSpeed);
+            OnBallSpeedChange?.Invoke(_ballSpeed);
         }
     }
 
@@ -49,7 +51,7 @@ public class MainLogic : MonoBehaviour
         SaveManager.Init();
         _audioController.Init();
         IsCheatMode = false;
-        SetupBallSettings(3);
+        SetupBallSettings(1);
     }
 
     private void Start()
@@ -75,7 +77,7 @@ public class MainLogic : MonoBehaviour
                 _roadController.Generation();
                 _ballController.GenerationBall();
                 SetupBallSettings(BallSpeed);
-                CameraController.Inst.ResetPosition();
+                _cameraController.ResetPosition();
                 _windowsManager.OpenWindow(TypeWindow.mainMenu);
                 break;
             case GameStates.play:
@@ -121,7 +123,7 @@ public class MainLogic : MonoBehaviour
     public void SetupBallSettings(float ballSpeed)
     {
         BallSpeed = ballSpeed;
-       _scoreForGem = SO.scoreForGemModifier * BallSpeed;
+       _scoreForGem = GameSettingsSO.scoreForGemModifier * BallSpeed;
     }
 
     public float GetCurrentScoreForGem()
@@ -136,6 +138,12 @@ public class MainLogic : MonoBehaviour
 
     public void SubscribeForBallSpeedChange(Action<float> act)
     {
-        OnBallSpeedeChange += act;
+        OnBallSpeedChange += act;
+    }
+
+    public void ChangeBallSkin(BallSkinData newData)
+    {
+        _audioController.PlayClickSound();
+        _ballController.ChangeBallSkin(newData);
     }
 }

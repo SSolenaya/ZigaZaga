@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using Zenject;
 
-public class CameraController : Singleton<CameraController>
-{
+public class CameraController : MonoBehaviour
+{ 
     public float BoundsSize { get; private set; } //  границы экрана
 
     [Inject] private MainLogic _mainLogic;

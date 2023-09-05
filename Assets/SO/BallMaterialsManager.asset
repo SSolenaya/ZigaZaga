@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7af9f961b2404784f934f7efcd6a3cc3, type: 3}
+  m_Name: BallMaterialsManager
+  m_EditorClassIdentifier: 
+  skinsList:
+  - name: dark metallic
+    sprite: {fileID: 21300000, guid: ae727e07f283e8b4ca39a96a51bc9dce, type: 3}
+    texture: {fileID: 2800000, guid: de95700623df8f14dbc2b6d127c66620, type: 3}
+  - name: blue cells
+    sprite: {fileID: 21300000, guid: 0045b4dd2ea88bf46b4c8d7134d92dd8, type: 3}
+    texture: {fileID: 2800000, guid: 233459c3ca73f5647963a75370254d18, type: 3}
+  - name: blue metallic
+    sprite: {fileID: 21300000, guid: 86471bf4d92ec5f428110baa569320ec, type: 3}
+    texture: {fileID: 2800000, guid: c99e6c7c5a7f64848806591373f69656, type: 3}
+  - name: gold cavernes
+    sprite: {fileID: 21300000, guid: 6f8892fd7410ee84697c96f3defb66ad, type: 3}
+    texture: {fileID: 2800000, guid: fc337eb5863803c449811134f468aa40, type: 3}
+  - name: gold metallic
+    sprite: {fileID: 21300000, guid: 9cd3b50b51b55c14d8cc2ad54e575f8b, type: 3}
+    texture: {fileID: 2800000, guid: 000098482f38c4b4f9ae8ff67d532b63, type: 3}
+  - name: gray metallic
+    sprite: {fileID: 21300000, guid: 6811adbc43b174247838346c4be3d9ad, type: 3}
+    texture: {fileID: 2800000, guid: fa02b73f77688d24a9b214f39b238700, type: 3}
+  - name: green cells
+    sprite: {fileID: 21300000, guid: 6ed0406d3e3b27b4b8da2edd36ea8c11, type: 3}
+    texture: {fileID: 2800000, guid: 04c9ca826c8a47b47822a2e96446d62d, type: 3}

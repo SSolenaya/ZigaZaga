@@ -44,5 +44,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a413eeacc5a7fb458b18a6008280004, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SO: {fileID: 11400000, guid: c8e3c75e82b9c70468d7e25f116be0c0, type: 2}
-  WindowsManager: {fileID: 2787892614710637776, guid: ca25ee7b1b915a84b993fd8997cf770b, type: 3}
+  GameSettingsSO: {fileID: 11400000, guid: c8e3c75e82b9c70468d7e25f116be0c0, type: 2}
+  BallMaterialsManagerSO: {fileID: 11400000, guid: e57105b23aaf4ec4481cf767a050e284, type: 2}

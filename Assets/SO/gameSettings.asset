@@ -19,5 +19,5 @@ MonoBehaviour:
   maxBlockRoadSize: 6
   visibleRoadDistance: 30
   yCoordForDestroy: -6
-  ballMaxSpeed: 15
-  ballSpeed: 1
+  ballMaxSpeed: 30
+  IsBallRuningOnMath: 1

@@ -6,6 +6,7 @@ using Zenject;
 public class RoadController : MonoBehaviour
 {
     [Inject] private GameCanvas gameCanvas;
+    [Inject] private CameraController _cameraController;
     [Inject] private MainLogic _mainLogic;
     [Inject] private BallController _ballController;
     [SerializeField] private RoadBlock _roadBlockPrefab;
@@ -35,10 +36,10 @@ public class RoadController : MonoBehaviour
         _defaultStartingBlock.transform.localPosition = new Vector3(2.5f, 0f, 1.5f);
         _defaultStartingBlock.Direction = Directions.right;
         _defaultStartingBlock.Scale = 2;
-
+        _platformBlock.SetNextBlock(_defaultStartingBlock);
 
         _startingBlock = _defaultStartingBlock;
-        GenerateRoad(_mainLogic.SO.blocksCountOnStart);
+        GenerateRoad(_mainLogic.GameSettingsSO.blocksCountOnStart);
     }
 
     private void Update()
@@ -51,13 +52,18 @@ public class RoadController : MonoBehaviour
         RuntimeGeneration();
     }
 
+    public RoadBlock GetStartingPlatformRoadBlock()
+    {
+        return _platformBlock;
+    }
+
     private void RuntimeGeneration()
     {
         if (_ballController.GetBallStates() == BallStates.move)
         {
-            float delta = Mathf.Sqrt(Mathf.Pow(_screenCenterPos.x - CameraController.Inst.GetCameraTransform().position.x, 2)
-                                     + Mathf.Pow(_screenCenterPos.y - CameraController.Inst.GetCameraTransform().position.z, 2));
-            if (delta < _mainLogic.SO.visibleRoadDistance)
+            float delta = Mathf.Sqrt(Mathf.Pow(_screenCenterPos.x - _cameraController.GetCameraTransform().position.x, 2)
+                                     + Mathf.Pow(_screenCenterPos.y - _cameraController.GetCameraTransform().position.z, 2));
+            if (delta < _mainLogic.GameSettingsSO.visibleRoadDistance)
             {
                 GenerateRoad(1);
             }
@@ -79,18 +85,18 @@ public class RoadController : MonoBehaviour
             if (startBlockPos.x >= centerXZ && _startingBlock.Direction == Directions.left //  вычисление размера проекции допустимого размера блока
                 || startBlockPos.x <= centerXZ && _startingBlock.Direction == Directions.right)
             {
-                suggestedCathet = CameraController.Inst.BoundsSize - dis;
+                suggestedCathet = _cameraController.BoundsSize - dis;
             }
 
             if (startBlockPos.x <= centerXZ && _startingBlock.Direction == Directions.left
                 || startBlockPos.x >= centerXZ && _startingBlock.Direction == Directions.right)
             {
-                suggestedCathet = CameraController.Inst.BoundsSize + dis;
+                suggestedCathet = _cameraController.BoundsSize + dis;
             }
 
 
             int suggestedHipo = (int) (suggestedCathet * Mathf.Sqrt(2f)); //  по размеру проекци вычисляем допустимый размер нового блока
-            int maxHipo = suggestedHipo > _mainLogic.SO.maxBlockRoadSize ? _mainLogic.SO.maxBlockRoadSize : suggestedHipo; //  случайно выбираем его размер в допустимых пределах
+            int maxHipo = suggestedHipo > _mainLogic.GameSettingsSO.maxBlockRoadSize ? _mainLogic.GameSettingsSO.maxBlockRoadSize : suggestedHipo; //  случайно выбираем его размер в допустимых пределах
             int currentBlockScale = Random.Range(2, maxHipo);
             if (currentBlockScale < 2)
             {
