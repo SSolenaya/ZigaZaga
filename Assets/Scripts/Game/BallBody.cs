@@ -6,9 +6,15 @@ using UnityEngine;
 public class BallBody : MonoBehaviour
 {
     private bool _isCheatModeOn;
-    private bool _isBallOnMath;
     private Action _onTriggerEnterAction;
     private Action _onGemTriggerAction;
+    private AbstractStrategyMovement _abstractStrategyMovement;
+
+
+    public void Setup(AbstractStrategyMovement abstractStrategyMovement)
+    {
+        _abstractStrategyMovement = abstractStrategyMovement;
+    }
 
     public void SubscribeForTriggerEnter(Action action) 
     { 
@@ -25,14 +31,10 @@ public class BallBody : MonoBehaviour
         _isCheatModeOn = newCheatMode;
     }
 
-    public void SetBallMovementMode(bool isBallMovedByMath)
-    {
-        _isBallOnMath = isBallMovedByMath;
-    }
-
+   
     public void OnTriggerEnter(Collider col)
     {
-        if (_isCheatModeOn && !_isBallOnMath)                                   // ball is running on physics
+        if (_isCheatModeOn && _abstractStrategyMovement.IsBallRunningByPysics())                                   // ball is running on physics
         {
             BotTrigger botTrigger = col.gameObject.GetComponent<BotTrigger>();
             if (botTrigger != null && !botTrigger.GetState())

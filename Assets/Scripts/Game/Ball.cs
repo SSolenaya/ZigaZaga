@@ -12,8 +12,8 @@ public enum BallStates
 
 public class Ball : MonoBehaviour
 {
-    [SerializeField] BallView _ballView;
-    [SerializeField] BallBody _ballBody;
+    [SerializeField] private BallView _ballView;
+    [SerializeField] private BallBody _ballBody;
     private RoadBlock _currentRoadBlock;
     private BallStates _ballState = BallStates.wait;
     private Directions _currentDir;
@@ -25,6 +25,7 @@ public class Ball : MonoBehaviour
     private UIWindowsManager _windowsManager;
     private GameInfoManager _gameInfoManager;
     private Vector3 _nextTurningPoint;
+    private AbstractStrategyMovement _abstractStrategyMovement;
 
 
     private void Update()
@@ -58,13 +59,16 @@ public class Ball : MonoBehaviour
             _speed = newSpeed;
             _ballView.ChangeViewRotationSpeed(_speed);
         });
-        _ballBody.SetBallMovementMode(_mainLogic.GameSettingsSO.IsBallRuningOnMath);
         ChangeSkin(mainLogic.BallMaterialsManagerSO.GetRandomSkinData());
-        _ballBody.SubscribeForTriggerEnter(OnReachingTurningPoint);
+        
         _ballBody.SubscribeForGemTrigger(OnGemCollision);
+       
+         _abstractStrategyMovement = _mainLogic.GameSettingsSO.IsBallRuningOnMath? new MathMovement(this) : new PhysicsMovement(this, _ballBody);
+        _ballBody.Setup(_abstractStrategyMovement);
+
     }
 
-
+    
 
     private void SetTurningPoints()
     {
@@ -88,30 +92,15 @@ public class Ball : MonoBehaviour
         }
     }
 
-    private float lastDistanseToTurningPoint = -1f;
+    
 
     private void Move()
     {
         
         if (_ballState == BallStates.move)
         {
-
-            Vector3 nextPos = transform.position + _currentDirectionV3 * Time.deltaTime * _speed;
-            bool isForwardMove = _currentDir == Directions.right;                    
-            if (_isCheatModeOn && _mainLogic.GameSettingsSO.IsBallRuningOnMath)
-            {
-                var currentDistance = Vector3.Distance(_nextTurningPoint, nextPos);
-                if (lastDistanseToTurningPoint !=-1 && (currentDistance > lastDistanseToTurningPoint))
-                {
-                    OnReachingTurningPoint();
-                    nextPos = _nextTurningPoint;
-                    lastDistanseToTurningPoint = -1f;
-                } else
-                {
-                    lastDistanseToTurningPoint = currentDistance;
-                }
-            }
-            transform.position = nextPos;
+            _abstractStrategyMovement.UpdateMovement(_mainLogic, _currentDirectionV3, _nextTurningPoint);
+            bool isForwardMove = _currentDir == Directions.right;
             _ballView.RotateView(isForwardMove);
         }
 
