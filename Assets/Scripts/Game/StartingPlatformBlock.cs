@@ -2,8 +2,10 @@ using UnityEngine;
 
 namespace Assets.Scripts {
 
-    public class DefaultRoadBlock : RoadBlock
+    public class StartingPlatformBlock : RoadBlock
     {
+        Vector3 myEndPos = new Vector3(0, 0, 1.5f);             //  temp
+
         public override void SelfDestroy()
         {
             Destroy(gameObject);
@@ -17,7 +19,6 @@ namespace Assets.Scripts {
 
         public override Vector3 GetTurningPoint()
         {
-            Vector3 myEndPos = new Vector3(0, 0, 1.5f);
             return myEndPos;
         }
 

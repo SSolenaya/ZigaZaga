@@ -10,12 +10,12 @@ public class RoadController : MonoBehaviour
     [Inject] private MainLogic _mainLogic;
     [Inject] private BallController _ballController;
     [SerializeField] private RoadBlock _roadBlockPrefab;
-    [SerializeField] private DefaultRoadBlock _platformPrefab;
-    [SerializeField] private DefaultRoadBlock _defaultStartingBlockPrefab;
+    [SerializeField] private StartingPlatformBlock _platformPrefab;
+    [SerializeField] private StartingRoadBlock _defaultStartingBlockPrefab;
     private Transform _parentForRoad;
 
-    private DefaultRoadBlock _platformBlock;
-    private DefaultRoadBlock _defaultStartingBlock;
+    private StartingPlatformBlock _platformBlock;
+    private StartingRoadBlock _defaultStartingBlock;
     private RoadBlock _startingBlock;
     private int _currentBlocksAmount = 2; // ещё есть стартовая платформа и 1й участок дороги
     private Vector2 _screenCenterPos;
