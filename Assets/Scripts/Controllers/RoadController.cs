@@ -5,7 +5,7 @@ using Zenject;
 
 public class RoadController : MonoBehaviour
 {
-    [Inject] private GameCanvas gameCanvas;
+    [Inject] private GameObjParentManager _parentManager;
     [Inject] private CameraController _cameraController;
     [Inject] private MainLogic _mainLogic;
     [Inject] private BallController _ballController;
@@ -24,7 +24,7 @@ public class RoadController : MonoBehaviour
 
     public void Generation()
     {
-        _parentForRoad = gameCanvas.parentForRoad;
+        _parentForRoad = _parentManager.parentForRoad;
         _platformBlock = Instantiate(_platformPrefab, _parentForRoad);
         _platformBlock.SetupAsDefault();
         _platformBlock.Setup(_mainLogic, this);

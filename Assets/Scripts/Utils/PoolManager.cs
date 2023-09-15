@@ -5,7 +5,7 @@ using Zenject;
 
 public class PoolManager
 {
-    [Inject] private GameCanvas gameCanvas;
+    [Inject] private GameObjParentManager _parentManager;
     private static Stack<RoadBlock> _roadBlockStack;
     private static Stack<Gem> _gemStack;
     private static Transform _parentForDeactivatedGO;
@@ -13,7 +13,7 @@ public class PoolManager
     [Inject]
     private void Setup()
     {
-        _parentForDeactivatedGO = gameCanvas.parentForPool;
+        _parentForDeactivatedGO = _parentManager.parentForPool;
         _roadBlockStack = new Stack<RoadBlock>();
         _gemStack = new Stack<Gem>();
     }

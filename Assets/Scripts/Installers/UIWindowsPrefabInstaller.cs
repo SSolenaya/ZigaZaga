@@ -7,7 +7,7 @@ using System.Collections.Generic;
 public class UIWindowsPrefabInstaller : ScriptableObjectInstaller
 {
     [SerializeField] private UIWindowsPrefabsHolder _uiWinsPrefabHolder;
-    [SerializeField] private GameCanvas _gameCanvasPrefab;
+    [SerializeField] private GameObjParentManager _gameObjParentManagerPrefab;
     [SerializeField] private CameraController _cameraControllerPrefab;
     [SerializeField] private UIWindowsManager _uIWindowsManagerPrefab;
     [SerializeField] private MainLogic _mainLogicPrefab;
@@ -21,8 +21,8 @@ public class UIWindowsPrefabInstaller : ScriptableObjectInstaller
     {
         Container.Bind<UIWindowsPrefabsHolder>().FromInstance(_uiWinsPrefabHolder).NonLazy();
 
-        Container.Bind<GameCanvas>()
-                .FromComponentInNewPrefab(_gameCanvasPrefab)
+        Container.Bind<GameObjParentManager>()
+                .FromComponentInNewPrefab(_gameObjParentManagerPrefab)
                 .AsSingle()
                 .NonLazy();
 

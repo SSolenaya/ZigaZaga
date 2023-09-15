@@ -9,7 +9,7 @@ public class UIWindowsManager:MonoBehaviour
     [Inject] private MainLogic _mainLogic;
     [Inject] private AudioController _audioController;
     [Inject] private GameInfoManager _gameInfoManager;
-    [Inject] private GameCanvas gameCanvas;
+    [Inject] private GameObjParentManager _parentManager;
     [Inject] private UIWindowsPrefabsHolder _prefabHolder;
     [Inject] private DiContainer _diContainer;
     [SerializeField] private List<BaseUiWindow> _listWindows = new List<BaseUiWindow>();
@@ -18,7 +18,7 @@ public class UIWindowsManager:MonoBehaviour
     [Inject]
     private void Setup()
     {
-        _parent = gameCanvas.parentForUIWindows;
+        _parent = _parentManager.parentForUIWindows;
         CreateUIWindows();
     }
 
