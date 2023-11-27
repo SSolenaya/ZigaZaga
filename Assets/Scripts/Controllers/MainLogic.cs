@@ -141,9 +141,10 @@ public class MainLogic : MonoBehaviour
         OnBallSpeedChange += act;
     }
 
-    public void ChangeBallSkin(BallSkinData newData)
+    public void ChangeBallSkin(Action<BallSkinData> act)
     {
-        _audioController.PlayClickSound();
-        _ballController.ChangeBallSkin(newData);
+        act += (_) => _audioController.PlayClickSound();
+        act += _ballController.ChangeBallSkin;
+        
     }
 }

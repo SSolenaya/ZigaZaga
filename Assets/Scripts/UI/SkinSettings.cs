@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,14 +8,14 @@ public class SkinSettings : MonoBehaviour
 {
     [SerializeField] private SkinButton _skinButtonPrefab;
     [SerializeField] private Transform _parentForSkinButtons;
-    private MainLogic _mainLogic;
     private List<Button> skinButtonList = new List<Button>();
+    private Action <BallSkinData> onSkinChangeAct;
 
     public void Setup(MainLogic mainLogic)
     {
-        _mainLogic = mainLogic;
+        mainLogic.ChangeBallSkin(onSkinChangeAct);
 
-        foreach (var skin in _mainLogic.BallMaterialsManagerSO.skinsList)
+        foreach (var skin in mainLogic.BallMaterialsManagerSO.skinsList)
         {
             CreateSkinButton(skin);
         }
@@ -26,7 +27,7 @@ public class SkinSettings : MonoBehaviour
         var btn = Instantiate(_skinButtonPrefab, _parentForSkinButtons);
         btn.Setup(skinData.sprite, () =>
         {
-            _mainLogic.ChangeBallSkin(skinData);
+            onSkinChangeAct?.Invoke(skinData);
         });
     }
 }
