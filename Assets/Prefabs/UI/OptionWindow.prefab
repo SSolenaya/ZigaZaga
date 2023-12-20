@@ -35,7 +35,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0, y: 136}
+  m_AnchoredPosition: {x: 0, y: 100}
   m_SizeDelta: {x: -280, y: 150}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!222 &1131896080727780615
@@ -441,7 +441,7 @@ GameObject:
   - component: {fileID: 8799482671045313701}
   - component: {fileID: 7285085940002950052}
   m_Layer: 5
-  m_Name: SkinOptionPane
+  m_Name: SkinOptionPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -465,7 +465,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -1060}
+  m_AnchoredPosition: {x: 0, y: -990}
   m_SizeDelta: {x: -40, y: 750}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &8799482671045313701
@@ -871,7 +871,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -520}
+  m_AnchoredPosition: {x: 0, y: -470}
   m_SizeDelta: {x: -40, y: 500}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &4422143144857909772
@@ -1356,7 +1356,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7947664020442326612, guid: 96fcd2d0fe7ad3e48a9585f0317ec2fc, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -280
+      value: -250
       objectReference: {fileID: 0}
     - target: {fileID: 7947664020442326612, guid: 96fcd2d0fe7ad3e48a9585f0317ec2fc, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

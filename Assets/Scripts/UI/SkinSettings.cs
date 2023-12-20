@@ -9,11 +9,11 @@ public class SkinSettings : MonoBehaviour
     [SerializeField] private SkinButton _skinButtonPrefab;
     [SerializeField] private Transform _parentForSkinButtons;
     private List<Button> skinButtonList = new List<Button>();
-    private Action <BallSkinData> onSkinChangeAct;
+    private MainLogic _mainLogic;
 
     public void Setup(MainLogic mainLogic)
     {
-        mainLogic.ChangeBallSkin(onSkinChangeAct);
+        _mainLogic = mainLogic;
 
         foreach (var skin in mainLogic.BallMaterialsManagerSO.skinsList)
         {
@@ -27,7 +27,7 @@ public class SkinSettings : MonoBehaviour
         var btn = Instantiate(_skinButtonPrefab, _parentForSkinButtons);
         btn.Setup(skinData.sprite, () =>
         {
-            onSkinChangeAct?.Invoke(skinData);
+            _mainLogic.ChangeBallSkin(skinData);
         });
     }
 }
