@@ -24,7 +24,7 @@ Material:
     m_Floats:
     - _BUILTIN_QueueControl: 0
     - _BUILTIN_QueueOffset: 0
-    - _DissolveVoronoi: 0.67
+    - _DissolveVoronoi: 0.37
     - _Emision_Strength: 0
     - _Emission_Strength: -0.1
     - _Noise_Power: 0.72
