@@ -51,12 +51,14 @@ public class MainLogic : MonoBehaviour
         SaveManager.Init();
         _audioController.Init();
         IsCheatMode = false;
-        SetupBallSettings(1);
+        SetBallSettings(1);
     }
 
     private void Start()
     {
         SetGameState(GameStates.readyToPlay);
+        _windowsManager.CreateUIWindows();
+        _ballController.SubscribeBallForInputClick();
     }
 
     public void SetGameState(GameStates newState)
@@ -72,11 +74,9 @@ public class MainLogic : MonoBehaviour
                 break;
             case GameStates.readyToPlay:
                 _gameInfoManager.ResetOldInfo();
-                _roadController.Clear();
-                _ballController.Clear();
                 _roadController.Generation();
                 _ballController.GenerationBall();
-                SetupBallSettings(BallSpeed);
+                SetBallSettings(BallSpeed);
                 _cameraController.ResetPosition();
                 _windowsManager.OpenWindow(TypeWindow.mainMenu);
                 break;
@@ -120,7 +120,7 @@ public class MainLogic : MonoBehaviour
         OnCheatModeStateChange += act;
     }
 
-    public void SetupBallSettings(float ballSpeed)
+    public void SetBallSettings(float ballSpeed)
     {
         BallSpeed = ballSpeed;
        _scoreForGem = GameSettingsSO.scoreForGemModifier * BallSpeed;

@@ -82,7 +82,7 @@ public class RoadBlock : MonoBehaviour
                 _gem.transform.SetParent(gameObject.transform);
                 _gem.transform.localPosition = new Vector3(0f, 1.5f, i);
                 _gem.gameObject.name = "Gem_" + i + "_on_" + gameObject.name;
-                _gem.Setup(this, _mainLogic);
+                _gem.Setup(this);
                 _gem.gameObject.SetActive(true);
                 _gemsList.Add(_gem);
             }

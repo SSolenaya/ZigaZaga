@@ -1,21 +1,22 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(Button))]
-public class SkinButton : ScrollViewItem
+
+public class ModeLabelItem : ScrollViewItem
 {
-    [SerializeField] private Image _img;
-    [SerializeField] private Image _frame;
+    [SerializeField] private TMP_Text _modeLabelTxt;
     [SerializeField] private Button _btn;
-    private BallSkinData _skinData;
+    [SerializeField] private Image _frame;
+    private GameModeData _modeData;
 
     public override void Configurate(IBaseScrollViewItemData data)
     {
-        _skinData = (BallSkinData)data;
-        _img.sprite = _skinData.sprite;
+        _modeData = (GameModeData)data;
+        _modeLabelTxt.text = _modeData.mode.ToString();
     }
 
     public override void SetItemChecked(bool isChecked)
@@ -26,6 +27,7 @@ public class SkinButton : ScrollViewItem
     public override void SetupOnClickAction(Action<IBaseScrollViewItemData> act)
     {
         _btn.onClick.RemoveAllListeners();
-        _btn.onClick.AddListener(()=> act?.Invoke(_skinData));
+        _btn.onClick.AddListener(() => act?.Invoke(_modeData));
     }
 }
+

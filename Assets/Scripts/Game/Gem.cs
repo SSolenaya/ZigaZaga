@@ -7,16 +7,21 @@ public class Gem : MonoBehaviour
     private float _speed;
     private RoadBlock _parentRoadBlock;
 
+    [Inject]
+    private void Setup(MainLogic mainLogic)
+    {
+        _mainLogic = mainLogic;
+    }
+
     public void OnEnable()
     {
         transform.localEulerAngles += Vector3.up * Random.Range(0f, 360f);
         _speed = _mainLogic.GameSettingsSO.gemRotatingSpeed * Random.Range(0.8f, 1.2f);
     }
 
-    public void Setup(RoadBlock parentBlock, MainLogic mainLogic)
+    public void Setup(RoadBlock parentBlock)
     {
         _parentRoadBlock = parentBlock;
-        _mainLogic = mainLogic;
     }
 
     public void Update()

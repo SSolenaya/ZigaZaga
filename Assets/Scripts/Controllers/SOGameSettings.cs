@@ -20,4 +20,6 @@ public class SOGameSettings : ScriptableObject
     
     public bool IsBallRuningOnMath;
 
+    public List<GameModeData> gameModes = new List<GameModeData> (4);
+
 }

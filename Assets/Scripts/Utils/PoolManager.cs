@@ -9,10 +9,12 @@ public class PoolManager
     private static Stack<RoadBlock> _roadBlockStack;
     private static Stack<Gem> _gemStack;
     private static Transform _parentForDeactivatedGO;
+    private static DiContainer _diContainer;
 
     [Inject]
-    private void Setup()
+    private void Setup(DiContainer diContainer)
     {
+        _diContainer = diContainer;
         _parentForDeactivatedGO = _parentManager.parentForPool;
         _roadBlockStack = new Stack<RoadBlock>();
         _gemStack = new Stack<Gem>();
@@ -43,7 +45,7 @@ public class PoolManager
             return result;
         }
         result = GameObject.Instantiate(gemPrefab, _parentForDeactivatedGO);
-        result.gameObject.SetActive(false);
+        _diContainer.Inject(result);
         result.name = gemPrefab.name;
         return result;
     }

@@ -9,8 +9,7 @@ public enum TypeWindow
     mainMenu,
     inGame,
     gameOver,
-    pause,
-    options
+    pause
 }
 public class BaseUiWindow : MonoBehaviour
 {
@@ -53,6 +52,9 @@ public class BaseUiWindow : MonoBehaviour
         _audioController = audioController;
         _windowsManager = windowsManager;
         _gameInfoManager = gameInfoManager;
+        SetupInnerElements();
     }
+
+    public virtual void SetupInnerElements(){ }
 
 }

@@ -19,7 +19,6 @@ public class UIWindowsManager:MonoBehaviour
     private void Setup()
     {
         _parent = _parentManager.parentForUIWindows;
-        CreateUIWindows();
     }
 
     private void Start()
@@ -27,7 +26,7 @@ public class UIWindowsManager:MonoBehaviour
         OpenWindow(TypeWindow.mainMenu);
     }
 
-    private void CreateUIWindows()
+    public void CreateUIWindows()
     {
         foreach (var UIWin in _prefabHolder.listUIWindowsPrefabs)
         {

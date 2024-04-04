@@ -24,6 +24,7 @@ public class RoadController : MonoBehaviour
 
     public void Generation()
     {
+        Clear();
         _parentForRoad = _parentManager.parentForRoad;
         _platformBlock = Instantiate(_platformPrefab, _parentForRoad);
         _platformBlock.SetupAsDefault();

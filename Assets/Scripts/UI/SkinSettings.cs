@@ -17,17 +17,17 @@ public class SkinSettings : MonoBehaviour
 
         foreach (var skin in mainLogic.BallMaterialsManagerSO.skinsList)
         {
-            CreateSkinButton(skin);
+            //CreateSkinButton(skin);
         }
         
     }
 
-    private void CreateSkinButton(BallSkinData skinData)
-    {
-        var btn = Instantiate(_skinButtonPrefab, _parentForSkinButtons);
-        btn.Setup(skinData.sprite, () =>
-        {
-            _mainLogic.ChangeBallSkin(skinData);
-        });
-    }
+    //private void CreateSkinButton(BallSkinData skinData)
+    //{
+    //    var btn = Instantiate(_skinButtonPrefab, _parentForSkinButtons);
+    //    btn.Setup(skinData.sprite, () =>
+    //    {
+    //        _mainLogic.ChangeBallSkin(skinData);
+    //    });
+    //}
 }

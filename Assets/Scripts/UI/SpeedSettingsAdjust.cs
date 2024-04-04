@@ -28,7 +28,7 @@ public class SpeedSettingsAdjust : MonoBehaviour
         var newScore = _mainLogic.GameSettingsSO.scoreForGemModifier * newSpeed;
         _speedValue.text = newSpeed.ToString();
         _scoreValue.text = newScore.ToString();
-        _mainLogic.SetupBallSettings(newSpeed);
+        _mainLogic.SetBallSettings(newSpeed);
     }
 
     public void SetActualSliderState()

@@ -12,9 +12,9 @@ public class BallController : MonoBehaviour
     [SerializeField] private Ball _ballPrefab;
     private Ball _ball;
     private Vector3 coordsCenterBall = new Vector3();
-    
 
-    private void Start()
+
+    public void SubscribeBallForInputClick()
     {
         var _inGameWin = _windowsManager.GetWindow<InGameWindow>(TypeWindow.inGame);
         _inGameWin.fullScreenClickObserver.SubscribeForClick(() => {
@@ -31,6 +31,7 @@ public class BallController : MonoBehaviour
 
     public void GenerationBall()
     {
+         Clear();
         _ball = Instantiate(_ballPrefab, _parentManager.parentForRoad);
         _ball.transform.localPosition = new Vector3(0f, 1.3f, -1.2f);
         _ball.Setup(_mainLogic, _audioController, _windowsManager, _gameInfoManager, _roadController);
