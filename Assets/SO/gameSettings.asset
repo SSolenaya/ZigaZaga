@@ -23,10 +23,10 @@ MonoBehaviour:
   IsBallRuningOnMath: 1
   gameModes:
   - mode: 0
-    ballSpeed: 2
-  - mode: 1
     ballSpeed: 4
-  - mode: 2
+  - mode: 1
     ballSpeed: 6
+  - mode: 2
+    ballSpeed: 8
   - mode: 3
-    ballSpeed: 10
+    ballSpeed: 12
