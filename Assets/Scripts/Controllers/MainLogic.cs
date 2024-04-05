@@ -141,10 +141,19 @@ public class MainLogic : MonoBehaviour
         OnBallSpeedChange += act;
     }
 
-    public void ChangeBallSkin(BallSkinData newData)
+    public void ChangeBallSkin(IBaseScrollViewItemData newData)
     {
+        BallSkinData newSkinData;
+        try
+        {
+            newSkinData = (BallSkinData)newData;
+        }
+        catch
+        {
+            Debug.LogError("Cannot cast IBaseScrollViewItemData to BallSkinData");
+            return;
+        }
         _audioController.PlayClickSound();
-        _ballController.ChangeBallSkin(newData);
-        
+        _ballController.ChangeBallSkin(newSkinData);
     }
 }

@@ -9,6 +9,7 @@ public class BallView : MonoBehaviour
     private MeshRenderer _meshRenderer;
     private float _angleHelper = 0f;
     private Vector3 _rotationHelperVec = Vector3.zero;
+    private BallSkinData currentSkinData;
 
     private void Awake()
     {
@@ -17,6 +18,8 @@ public class BallView : MonoBehaviour
 
     public void ChangeSkin(BallSkinData newData)
     {
+        if (currentSkinData == newData) return;
+        currentSkinData = newData;
         _meshRenderer.material.mainTexture = newData.texture;
     }
 

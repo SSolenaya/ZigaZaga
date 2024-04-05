@@ -16,24 +16,15 @@ public class GameModeController : MonoBehaviour
         _mainLogic = mainLogic;
         _audioController = audioController;
         ScrollViewBuilder _scrollViewBuilder = new ScrollViewBuilder();
-        _scrollViewBuilder.Build<GameModeData>(_mainLogic.GameSettingsSO.gameModes, itemPrefab, itemsParent, (_) => ChoseGameMode(_));
+        _scrollViewBuilder.Build<GameModeData>(_mainLogic.GameSettingsSO.gameModes, itemPrefab, itemsParent, ChoseGameMode);
         ChoseGameMode(_mainLogic.GameSettingsSO.gameModes[0]);
     }
 
     private void ChoseGameMode(IBaseScrollViewItemData newData)
     {
-        GameModeData newModeData;
-        try
-        {
-            newModeData = (GameModeData)newData;
-        } catch
-        {
-            Debug.LogError("Cannot cast IBaseScrollViewItemData to GameModeData in GameModeController");
-            return;
-        }
-        if (newModeData == currentModeData) return;
+        if (newData is not GameModeData gameModeData || gameModeData == currentModeData)  return;
         _audioController.PlayClickSound();
-        currentModeData = newModeData;
+        currentModeData = gameModeData;
         _mainLogic.SetBallSettings(currentModeData.ballSpeed);
         _mainLogic?.SetCheatMode(currentModeData.mode.CompareTo(GameModes.cheat) == 0);
     }
