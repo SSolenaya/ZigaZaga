@@ -25,6 +25,7 @@ public class Ball : MonoBehaviour
     private GameInfoManager _gameInfoManager;
     private Vector3 _nextTurningPoint;
     private AbstractStrategyMovement _abstractStrategyMovement;
+    private float _fallingAceleration = 1f;
 
 
     private void Update()
@@ -105,8 +106,7 @@ public class Ball : MonoBehaviour
 
         if (_ballState == BallStates.fall)
         {
-            Vector3 fallingDir = _currentDirectionV3 + Vector3.down;
-            transform.position += fallingDir * Time.deltaTime * _speed * 3;
+            transform.position += _currentDirectionV3 * Time.deltaTime * _speed * _fallingAceleration;
             if (transform.position.y < _mainLogic.GameSettingsSO.yCoordForDestroy)
             {
                 _mainLogic.SetGameState(GameStates.gameOver);
@@ -126,8 +126,12 @@ public class Ball : MonoBehaviour
             case BallStates.fall:
                 _windowsManager.CloseWindow(TypeWindow.inGame);
                 _audioController.PlayFailSound();
-                Vector3 simulationGravity = new Vector3(_currentDirectionV3.x, _currentDirectionV3.y, _currentDirectionV3.z);
-                DOVirtual.Float(1, 0, 0.5f, var => { _currentDirectionV3 = simulationGravity * var; }).SetEase(Ease.OutQuad);
+                Vector3 startFallingVec = _currentDirectionV3;
+                DOVirtual.Vector3(startFallingVec, Vector3.down, 1f, (currentDir) => 
+                {
+                    _currentDirectionV3 = currentDir;
+                    _fallingAceleration = 1/ (1 + _currentDirectionV3.y);
+                });
                 break;
             case BallStates.move:
                 break;
