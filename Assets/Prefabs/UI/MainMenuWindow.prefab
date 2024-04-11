@@ -197,7 +197,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -874,7 +874,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1030,7 +1030,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 0}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1138,7 +1138,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 0}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1403,7 +1403,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1492,7 +1492,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1668,12 +1668,24 @@ PrefabInstance:
     m_TransformParent: {fileID: 1131896081660223775}
     m_Modifications:
     - target: {fileID: 181165830082352367, guid: 62de790f2f058354aaa6f22478a1b40e, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 181165830082352367, guid: 62de790f2f058354aaa6f22478a1b40e, type: 3}
       propertyPath: m_HorizontalAlignment
       value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2240003855704878758, guid: 62de790f2f058354aaa6f22478a1b40e, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2882583691897137111, guid: 62de790f2f058354aaa6f22478a1b40e, type: 3}
       propertyPath: m_SizeDelta.x
       value: 296.711
+      objectReference: {fileID: 0}
+    - target: {fileID: 4004687075968889382, guid: 62de790f2f058354aaa6f22478a1b40e, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4004687075968889382, guid: 62de790f2f058354aaa6f22478a1b40e, type: 3}
       propertyPath: m_HorizontalAlignment
@@ -1697,6 +1709,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5030412846403349450, guid: 62de790f2f058354aaa6f22478a1b40e, type: 3}
       propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5172758136309613682, guid: 62de790f2f058354aaa6f22478a1b40e, type: 3}
+      propertyPath: m_RaycastTarget
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6297097601655230657, guid: 62de790f2f058354aaa6f22478a1b40e, type: 3}
@@ -1808,6 +1824,10 @@ PrefabInstance:
       value: StatsPanel
       objectReference: {fileID: 0}
     - target: {fileID: 8019998411804465394, guid: 62de790f2f058354aaa6f22478a1b40e, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8019998411804465394, guid: 62de790f2f058354aaa6f22478a1b40e, type: 3}
       propertyPath: m_HorizontalAlignment
       value: 4
       objectReference: {fileID: 0}
@@ -1818,6 +1838,10 @@ PrefabInstance:
     - target: {fileID: 8133427421008923907, guid: 62de790f2f058354aaa6f22478a1b40e, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: -1.4858093
+      objectReference: {fileID: 0}
+    - target: {fileID: 8275774360174289595, guid: 62de790f2f058354aaa6f22478a1b40e, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 62de790f2f058354aaa6f22478a1b40e, type: 3}
