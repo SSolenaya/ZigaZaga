@@ -7,7 +7,7 @@ public class SOGameSettings : ScriptableObject
 {
     public int scoreForGemModifier = 2;
     public int scoreForTap = 1;
-
+    public float gemChancePercent;
     public float gemRotatingSpeed = 30;
 
     public int blocksCountOnStart = 10;

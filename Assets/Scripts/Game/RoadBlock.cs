@@ -31,6 +31,7 @@ public class RoadBlock : MonoBehaviour
     private BlockStates _physicState;
     private List<Gem> _gemsList = new List<Gem>();
     private Tween _tweenMove;
+    private float _gemChance = 0.5f;
 
     public virtual void Setup(int scale, RoadBlock previousBlock)
     {
@@ -55,6 +56,7 @@ public class RoadBlock : MonoBehaviour
     public void Setup(MainLogic mainLogic, RoadController roadController)
     {
         _mainLogic = mainLogic;
+        _gemChance = _mainLogic.GameSettingsSO.gemChancePercent/100;
         _roadController = roadController;
 
     }
@@ -76,7 +78,7 @@ public class RoadBlock : MonoBehaviour
         for (int i = 1; i <= maxGems; i++)
         {
             float r = Random.Range(0, 1f);
-            if (r > 0.66f)
+            if (r < _gemChance)
             {
                 Gem _gem = PoolManager.GetGemFromPull(_gemPrefab);
                 _gem.transform.SetParent(gameObject.transform);

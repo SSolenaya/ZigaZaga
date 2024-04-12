@@ -20,7 +20,7 @@ public class BallView : MonoBehaviour
     {
         if (currentSkinData == newData) return;
         currentSkinData = newData;
-        _meshRenderer.material.mainTexture = newData.texture;
+        _meshRenderer.sharedMaterial.mainTexture = newData.texture;
     }
 
     public void RotateView(bool isForwardMove)
