@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scoreForGemModifier: 2
   scoreForTap: 1
+  gemChancePercent: 60
   gemRotatingSpeed: 50
   blocksCountOnStart: 10
   maxBlockRoadSize: 6
