@@ -8,7 +8,6 @@ using Zenject;
 
 public class CheatToggle : MonoBehaviour
 {
-
     private MainLogic _mainLogic;
     [SerializeField] private Toggle _toggle;
 
